@@ -388,6 +388,7 @@
     break-after: avoid !important;
     break-before: avoid !important;
     break-inside: avoid !important;
+    overflow: hidden !important;
   }
 
   /* Alineación arriba a la izquierda sin margen (0) para corte directo al ras de la hoja */
@@ -407,10 +408,20 @@
   .cartel-sheet.p118 {
     width: 100% !important;
     height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
+    max-width: 216mm !important;
+    max-height: 254mm !important;
+    padding: 10mm 14mm 8mm 14mm !important;
     box-sizing: border-box !important;
-    margin: 0 !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .cartel-sheet.p118 .pricing-center {
+    gap: 3.5mm !important;
   }
 
   /* Guía / línea gris de corte para formatos menores a tamaño Carta (13x19, 15x21, 9x13, 9x7, 6x4, 12x3, etc.) */

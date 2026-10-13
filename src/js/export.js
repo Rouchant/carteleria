@@ -24,6 +24,7 @@ async function exportToPDF() {
 
   let prevTransform = '';
   let prevTransition = '';
+  let prevTab = '';
 
   // Temporizador de seguridad para evitar que el botón quede bloqueado bajo cualquier contingencia
   const safetyTimer = setTimeout(() => {
@@ -39,6 +40,14 @@ async function exportToPDF() {
 
   try {
     showToast('Procesando PDF en alta resolución...');
+
+    // Si estamos en móvil y en la pestaña de editor, activar temporalmente preview para que el cartel tenga dimensiones reales y html2canvas lo capture sin error
+    if (dom && dom.appLayout) {
+      prevTab = dom.appLayout.dataset.activeTab || '';
+      if (prevTab === 'editor') {
+        dom.appLayout.dataset.activeTab = 'preview';
+      }
+    }
 
     // Opciones milimétricas de papel según formato
     let pdfConfig = {
@@ -72,6 +81,24 @@ async function exportToPDF() {
       await document.fonts.ready;
     }
 
+    // Dimensiones de plantilla en mm como fallback infalible ante cualquier estado del DOM
+    const templateDims = {
+      p118: { w: 216, h: 279 },
+      't-6x4-sheet': { w: 216, h: 279 },
+      't-15x21': { w: 150, h: 210 },
+      p132: { w: 130, h: 190 },
+      't-9x13': { w: 90, h: 130 },
+      't-9x7': { w: 90, h: 70 },
+      p123: { w: 210, h: 48 },
+      't-12x3': { w: 120, h: 30 },
+      p121: { w: 140, h: 95 },
+      't-6x4': { w: 60, h: 40 }
+    };
+    const curDim = templateDims[state.template] || { w: 216, h: 279 };
+    const mmToPx = 96 / 25.4;
+    const fallbackWidth = Math.round(curDim.w * mmToPx);
+    const fallbackHeight = Math.round(curDim.h * mmToPx);
+
     // Desactivar temporalmente el zoom de la vista previa para que html2canvas capture a escala 1:1 real
     prevTransform = (dom && dom.previewWrapper) ? dom.previewWrapper.style.transform : '';
     prevTransition = (dom && dom.previewWrapper) ? dom.previewWrapper.style.transition : '';
@@ -80,9 +107,9 @@ async function exportToPDF() {
       dom.previewWrapper.style.transform = 'none';
     }
 
-    // Forzar reflujo para que las dimensiones no-escaladas se apliquen de inmediato
-    const sheetWidth = sheet.offsetWidth;
-    const sheetHeight = sheet.offsetHeight;
+    // Forzar reflujo y obtener dimensiones garantizadas (nunca 0)
+    const sheetWidth = (sheet.offsetWidth && sheet.offsetWidth > 50) ? sheet.offsetWidth : fallbackWidth;
+    const sheetHeight = (sheet.offsetHeight && sheet.offsetHeight > 50) ? sheet.offsetHeight : fallbackHeight;
 
     // Renderizado en alta resolución fotográfica (300 DPI) con jsPDF y html2canvas
     const canvas = await html2canvas(sheet, {
@@ -202,32 +229,24 @@ async function exportToPDF() {
 
     if (isIOS) {
       const pdfBlob = doc.output('blob');
-      const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
-
-      // 1. En iPhone/iPad con soporte Web Share API (iOS 15+), abrir Share Sheet nativo ("Guardar en Archivos")
-      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        try {
-          await navigator.share({
-            files: [pdfFile],
-            title: filename
-          });
-          showToast(`PDF listo en iPhone`);
-          return;
-        } catch (shareErr) {
-          if (shareErr.name === 'AbortError') {
-            return;
-          }
-          console.warn('Fallo navigator.share en iOS, usando visor alternativo:', shareErr);
-        }
-      }
-
-      // 2. Fallback iOS: abrir visor nativo de PDF en pestaña nueva o redirección directa
       const blobUrl = URL.createObjectURL(pdfBlob);
-      const newWin = window.open(blobUrl, '_blank');
-      if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-        window.location.href = blobUrl;
-      }
-      showToast(`PDF abierto. Puedes guardarlo desde el menú Compartir.`);
+
+      // Usar enlace de descarga directa compatible con Safari iOS 13+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = filename;
+      downloadLink.rel = 'noopener';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+
+      setTimeout(() => {
+        if (downloadLink.parentNode) {
+          downloadLink.parentNode.removeChild(downloadLink);
+        }
+        URL.revokeObjectURL(blobUrl);
+      }, 3000);
+
+      showToast(`PDF listo. Revisa tus descargas.`);
     } else {
       // Descarga directa tradicional en escritorio y Android
       doc.save(filename);
@@ -247,6 +266,15 @@ async function exportToPDF() {
     if (btnMobile) {
       btnMobile.innerHTML = originalTextMobile;
       btnMobile.disabled = false;
+    }
+
+    // Restaurar pestaña activa original si se modificó
+    try {
+      if (dom && dom.appLayout && prevTab) {
+        dom.appLayout.dataset.activeTab = prevTab;
+      }
+    } catch (e) {
+      console.warn('Advertencia restaurando pestaña:', e);
     }
 
     // Restaurar el zoom original de la vista previa
