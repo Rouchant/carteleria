@@ -324,7 +324,7 @@
   html, body {
     width: 100% !important;
     height: auto !important;
-    min-height: 100% !important;
+    min-height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
@@ -336,6 +336,7 @@
   .app-layout {
     display: block !important;
     height: auto !important;
+    min-height: auto !important;
     width: 100% !important;
     overflow: visible !important;
     position: static !important;
@@ -348,14 +349,19 @@
   .btn-view-mobile,
   .btn-back-mobile,
   .toast-container,
-  .app-watermark {
+  .app-watermark,
+  .app-layout[data-active-tab="editor"] .editor-sidebar {
     display: none !important;
   }
 
   .preview-stage,
-  .preview-canvas-container {
+  .preview-canvas-container,
+  .app-layout[data-active-tab="editor"] .preview-stage,
+  .app-layout[data-active-tab="preview"] .preview-stage {
     display: block !important;
+    visibility: visible !important;
     height: auto !important;
+    min-height: auto !important;
     width: 100% !important;
     background: transparent !important;
     padding: 0 !important;
@@ -371,13 +377,25 @@
     padding: 0 !important;
     width: 100% !important;
     height: auto !important;
+    min-height: auto !important;
+  }
+
+  #cartelContainer {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
   }
 
   .cartel-sheet {
     box-shadow: none !important;
     margin: 0 auto !important;
     page-break-after: avoid !important;
+    page-break-before: avoid !important;
     page-break-inside: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
     break-inside: avoid !important;
   }
 

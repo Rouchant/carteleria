@@ -190,9 +190,43 @@ function bindEvents() {
     });
   }
 
+  // Disparador de impresión con preparación previa del DOM (vital para Chrome en iOS y WKWebView)
+  function triggerPrint() {
+    const prevTab = dom.appLayout ? dom.appLayout.dataset.activeTab : 'editor';
+
+    // 1. Asegurar que la pestaña activa sea preview para que el cartel esté visible en el render-tree móvil
+    if (dom.appLayout) {
+      dom.appLayout.dataset.activeTab = 'preview';
+    }
+
+    // 2. Desactivar transform de zoom inmediatamente (Chrome iOS no dispara beforeprint)
+    const prevTransform = dom.previewWrapper ? dom.previewWrapper.style.transform : '';
+    const prevTransition = dom.previewWrapper ? dom.previewWrapper.style.transition : '';
+    if (dom.previewWrapper) {
+      dom.previewWrapper.style.transition = 'none';
+      dom.previewWrapper.style.transform = 'none';
+    }
+
+    // 3. Pequeña espera para reflujo garantizado antes de invocar el motor de impresión nativo
+    setTimeout(() => {
+      window.print();
+
+      // 4. Restaurar zoom y pestaña después de presentar el diálogo de impresión
+      setTimeout(() => {
+        if (dom.previewWrapper) {
+          dom.previewWrapper.style.transform = prevTransform;
+          dom.previewWrapper.style.transition = prevTransition;
+        }
+        if (dom.appLayout) {
+          dom.appLayout.dataset.activeTab = prevTab;
+        }
+      }, 500);
+    }, 120);
+  }
+
   // Botón Imprimir
   dom.btnPrint.addEventListener('click', () => {
-    window.print();
+    triggerPrint();
   });
 
   // Manejadores nativos para garantizar escala 1:1 en la impresión del navegador
@@ -233,7 +267,7 @@ function bindEvents() {
     dom.btnBackEditorMobile.addEventListener('click', () => switchMobileTab('editor'));
   }
   if (dom.btnPrintMobile) {
-    dom.btnPrintMobile.addEventListener('click', () => window.print());
+    dom.btnPrintMobile.addEventListener('click', () => triggerPrint());
   }
   if (dom.btnDownloadPdfMobile) {
     dom.btnDownloadPdfMobile.addEventListener('click', () => exportToPDF());

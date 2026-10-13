@@ -915,8 +915,16 @@ input:focus, select:focus {
   .editor-sidebar,
   .preview-toolbar,
   .app-watermark,
-  .toast-container {
+  .toast-container,
+  .app-layout[data-active-tab="editor"] .editor-sidebar {
     display: none !important;
+  }
+
+  .app-layout[data-active-tab="editor"] .preview-stage,
+  .app-layout[data-active-tab="preview"] .preview-stage,
+  .preview-stage {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 
