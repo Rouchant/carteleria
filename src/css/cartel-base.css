@@ -659,13 +659,15 @@
   @media print and (max-device-width: 900px) {
     .cartel-sheet.p118 {
       width: 100% !important;
-      max-width: 195mm !important;
-      height: auto !important;
-      max-height: 220mm !important;
-      padding: 3mm 8mm 2mm 8mm !important;
+      max-width: 198mm !important;
+      height: 248mm !important;
+      max-height: 248mm !important;
+      padding: 6mm 10mm 4mm 10mm !important;
       margin: 0 auto !important;
       box-sizing: border-box !important;
       overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
       justify-content: space-between !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
@@ -673,33 +675,33 @@
       break-after: avoid !important;
     }
 
-    .p118 .top-header-row { min-height: 11mm !important; margin-bottom: 0 !important; }
-    .p118 .online-slogan { font-size: 9.5pt !important; padding-top: 0 !important; }
-    .p118 .qr-box { width: 12mm !important; height: 12mm !important; }
-    .p118 .product-header { margin-top: 0 !important; margin-bottom: 1mm !important; }
-    .p118 .brand-name { font-size: 28pt !important; line-height: 1.05 !important; }
-    .p118 .category-name { font-size: 16pt !important; margin-top: 0.5mm !important; }
-    .p118 .model-sku-row { font-size: 11pt !important; margin-top: 0.5mm !important; }
-    .p118 .pricing-center { gap: 2mm !important; }
-    .p118 .oportunidad-img, .p118 .cmr-card-img { height: 14mm !important; }
-    .p118 .price-cmr-value { font-size: 58pt !important; margin-bottom: 0.5mm !important; }
-    .p118 .cuotas-line-1 { font-size: 14pt !important; margin-top: 1mm !important; }
-    .p118 .cuotas-line-2 { font-size: 10pt !important; margin-top: 0.5mm !important; }
-    .p118 .price-oferta-block { margin-top: 2mm !important; }
-    .p118 .price-oferta-value { font-size: 44pt !important; margin-bottom: 0.5mm !important; }
-    .p118 .price-oferta-label { font-size: 14pt !important; margin-top: 0.5mm !important; }
-    .p118 .price-normal-block { margin-top: 2mm !important; }
-    .p118 .price-normal-value { font-size: 38pt !important; margin-bottom: 0.5mm !important; }
-    .p118 .price-normal-label { font-size: 13pt !important; margin-top: 0.5mm !important; }
-    .p118 .solo-normal-big-price { font-size: 68pt !important; margin-bottom: 1.5mm !important; }
-    .p118 .todo-medio-label { font-size: 16pt !important; margin-bottom: 1mm !important; }
-    .p118 .todo-medio-label + .price-cmr-value { font-size: 64pt !important; margin-bottom: 1mm !important; }
-    .p118 .bottom-footer { padding-top: 1mm !important; align-items: flex-end !important; position: relative !important; }
+    .p118 .top-header-row { min-height: 14mm !important; margin-bottom: 1mm !important; }
+    .p118 .online-slogan { font-size: 11pt !important; padding-top: 0 !important; }
+    .p118 .qr-box { width: 14mm !important; height: 14mm !important; }
+    .p118 .product-header { margin-top: 0 !important; margin-bottom: 2mm !important; }
+    .p118 .brand-name { font-size: 34pt !important; line-height: 1.08 !important; }
+    .p118 .category-name { font-size: 19pt !important; margin-top: 1mm !important; }
+    .p118 .model-sku-row { font-size: 13pt !important; margin-top: 1mm !important; }
+    .p118 .pricing-center { gap: 3.5mm !important; }
+    .p118 .oportunidad-img, .p118 .cmr-card-img { height: 17mm !important; }
+    .p118 .price-cmr-value { font-size: 72pt !important; margin-bottom: 1mm !important; }
+    .p118 .cuotas-line-1 { font-size: 16pt !important; margin-top: 1.2mm !important; }
+    .p118 .cuotas-line-2 { font-size: 12pt !important; margin-top: 0.8mm !important; }
+    .p118 .price-oferta-block { margin-top: 3mm !important; }
+    .p118 .price-oferta-value { font-size: 52pt !important; margin-bottom: 1mm !important; }
+    .p118 .price-oferta-label { font-size: 17pt !important; margin-top: 1mm !important; }
+    .p118 .price-normal-block { margin-top: 3.5mm !important; }
+    .p118 .price-normal-value { font-size: 44pt !important; margin-bottom: 1mm !important; }
+    .p118 .price-normal-label { font-size: 16pt !important; margin-top: 1mm !important; }
+    .p118 .solo-normal-big-price { font-size: 80pt !important; margin-bottom: 2mm !important; }
+    .p118 .todo-medio-label { font-size: 19pt !important; margin-bottom: 1mm !important; }
+    .p118 .todo-medio-label + .price-cmr-value { font-size: 74pt !important; margin-bottom: 1mm !important; }
+    .p118 .bottom-footer { padding-top: 2mm !important; align-items: flex-end !important; position: relative !important; }
     .legal-box,
     .p118 .legal-box {
       width: 78% !important;
-      font-size: 4.8pt !important;
-      line-height: 1.15 !important;
+      font-size: 5pt !important;
+      line-height: 1.2 !important;
       display: flex !important;
       flex-direction: column !important;
       justify-content: flex-start !important;
@@ -709,14 +711,14 @@
     }
     .vigencia-text,
     .p118 .vigencia-text {
-      font-size: 6.5pt !important;
+      font-size: 6.8pt !important;
       margin-bottom: 0 !important;
       line-height: 1.15 !important;
     }
     .legal-cmf-img,
     .p118 .legal-cmf-img {
       width: 100% !important;
-      max-width: 145mm !important;
+      max-width: 148mm !important;
       height: auto !important;
       aspect-ratio: 1303 / 114 !important;
       object-fit: fill !important;
@@ -725,28 +727,28 @@
       margin: 0 !important;
       padding: 0 !important;
     }
-    .p118 .fpuntos-badge { width: 14mm !important; height: 14mm !important; }
+    .p118 .fpuntos-badge { width: 17mm !important; height: 17mm !important; }
     .p118 .template-code-badge {
       position: absolute !important;
       bottom: 0 !important;
       left: 50% !important;
       transform: translateX(-50%) !important;
-      font-size: 6pt !important;
+      font-size: 6.5pt !important;
       display: block !important;
     }
 
     .cartel-sheet.t-6x4-sheet {
       width: 100% !important;
-      max-width: 195mm !important;
-      height: 220mm !important;
-      max-height: 220mm !important;
-      padding: 3mm 6mm !important;
+      max-width: 198mm !important;
+      height: 248mm !important;
+      max-height: 248mm !important;
+      padding: 6mm 8mm !important;
       margin: 0 auto !important;
       overflow: hidden !important;
     }
 
     #cartelContainer {
-      max-height: 222mm !important;
+      max-height: 250mm !important;
       overflow: hidden !important;
     }
   }
