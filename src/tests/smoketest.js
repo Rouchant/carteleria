@@ -14,7 +14,8 @@ const vm = require('vm');
 const http = require('http');
 
 const SERVER_URL = process.env.TEST_URL || 'http://localhost:3000';
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = path.resolve(__dirname, '..', '..');
+const SRC_DIR = path.resolve(__dirname, '..');
 
 // Colores ANSI para salida en terminal
 const C = {
@@ -174,8 +175,8 @@ function testMathAndFormatting() {
   console.log(`\n${C.bold}${C.cyan}--- [3] Lógica Matemática y Cálculos Financieros ---${C.reset}`);
 
   // Cargar utilidades y calculadora en entorno sandbox
-  const utilsCode = fs.readFileSync(path.join(ROOT_DIR, 'js/utils.js'), 'utf-8');
-  const calcCode = fs.readFileSync(path.join(ROOT_DIR, 'js/calculator.js'), 'utf-8');
+  const utilsCode = fs.readFileSync(path.join(SRC_DIR, 'js/utils.js'), 'utf-8');
+  const calcCode = fs.readFileSync(path.join(SRC_DIR, 'js/calculator.js'), 'utf-8');
 
   const context = { console, Math };
   vm.createContext(context);
@@ -236,8 +237,8 @@ function testMathAndFormatting() {
 function testTemplatesRender() {
   console.log(`\n${C.bold}${C.cyan}--- [4] Renderizado HTML de las 10 Plantillas de Cartelería ---${C.reset}`);
 
-  const utilsCode = fs.readFileSync(path.join(ROOT_DIR, 'js/utils.js'), 'utf-8');
-  const tplCode = fs.readFileSync(path.join(ROOT_DIR, 'js/templates.js'), 'utf-8');
+  const utilsCode = fs.readFileSync(path.join(SRC_DIR, 'js/utils.js'), 'utf-8');
+  const tplCode = fs.readFileSync(path.join(SRC_DIR, 'js/templates.js'), 'utf-8');
 
   // Mock elemental del DOM
   class MockElement {
@@ -366,7 +367,7 @@ function testTemplatesRender() {
 function testCssQuality() {
   console.log(`\n${C.bold}${C.cyan}--- [5] Auditoría de Calidad CSS (Kerning & Espaciado) ---${C.reset}`);
 
-  const cssDir = path.join(ROOT_DIR, 'css');
+  const cssDir = path.join(SRC_DIR, 'css');
   const cssFiles = fs.readdirSync(cssDir).filter(f => f.endsWith('.css'));
 
   assert(cssFiles.length >= 4, `Archivos modulares presentes en /css (${cssFiles.join(', ')})`);

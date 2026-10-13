@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = path.resolve(__dirname, '..', '..');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -32,11 +32,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Compatibilidad: si un recurso estático se solicita en raíz pero está en /assets/
+  // Compatibilidad: buscar en /src/ si no existe en raíz
   if (!fs.existsSync(filePath)) {
-    const assetFallback = path.join(ROOT_DIR, 'assets', reqPath);
-    if (fs.existsSync(assetFallback)) {
-      filePath = assetFallback;
+    const srcFallback = path.join(ROOT_DIR, 'src', reqPath);
+    if (fs.existsSync(srcFallback)) {
+      filePath = srcFallback;
+    } else {
+      const assetFallback = path.join(ROOT_DIR, 'src', 'assets', reqPath);
+      if (fs.existsSync(assetFallback)) {
+        filePath = assetFallback;
+      }
     }
   }
 

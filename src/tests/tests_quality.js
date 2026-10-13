@@ -121,12 +121,13 @@ class MockElement {
 }
 
 // Cargar códigos en contexto VM
-const ROOT_DIR = path.resolve(__dirname, '..');
-const utilsCode = fs.readFileSync(path.join(ROOT_DIR, 'js/utils.js'), 'utf-8');
-const calcCode = fs.readFileSync(path.join(ROOT_DIR, 'js/calculator.js'), 'utf-8');
-const tplCode = fs.readFileSync(path.join(ROOT_DIR, 'js/templates.js'), 'utf-8');
-const stateCode = fs.readFileSync(path.join(ROOT_DIR, 'js/state.js'), 'utf-8');
-const exportCode = fs.readFileSync(path.join(ROOT_DIR, 'js/export.js'), 'utf-8');
+const ROOT_DIR = path.resolve(__dirname, '..', '..');
+const SRC_DIR = path.resolve(__dirname, '..');
+const utilsCode = fs.readFileSync(path.join(SRC_DIR, 'js/utils.js'), 'utf-8');
+const calcCode = fs.readFileSync(path.join(SRC_DIR, 'js/calculator.js'), 'utf-8');
+const tplCode = fs.readFileSync(path.join(SRC_DIR, 'js/templates.js'), 'utf-8');
+const stateCode = fs.readFileSync(path.join(SRC_DIR, 'js/state.js'), 'utf-8');
+const exportCode = fs.readFileSync(path.join(SRC_DIR, 'js/export.js'), 'utf-8');
 
 const ctx = {
   console,
@@ -338,9 +339,9 @@ test('render6x4 individual y hoja carta 18x generan celdas completas', () => {
 currentCategory = 'cssTypography';
 console.log(`\n${C.bold}${C.yellow}--- [4] Auditoría CSS: Calidad Tipográfica y Reglas Retail ---${C.reset}`);
 
-const cartelCss = fs.readFileSync(path.join(ROOT_DIR, 'css/cartel-templates.css'), 'utf-8');
-const baseCss = fs.readFileSync(path.join(ROOT_DIR, 'css/cartel-base.css'), 'utf-8');
-const fontsCss = fs.readFileSync(path.join(ROOT_DIR, 'css/fonts.css'), 'utf-8');
+const cartelCss = fs.readFileSync(path.join(SRC_DIR, 'css/cartel-templates.css'), 'utf-8');
+const baseCss = fs.readFileSync(path.join(SRC_DIR, 'css/cartel-base.css'), 'utf-8');
+const fontsCss = fs.readFileSync(path.join(SRC_DIR, 'css/fonts.css'), 'utf-8');
 
 test('Interletrado compacto en números de precios (letter-spacing menor)', () => {
   expect(baseCss).toContain('letter-spacing: -0.035em;');

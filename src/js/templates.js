@@ -5,16 +5,16 @@
 // Rutas o Data URIs para compatibilidad 100% portable y offline
 const ASSET_PATHS = {
   get cmr() {
-    return (typeof ASSETS !== 'undefined' && ASSETS.CMR) ? ASSETS.CMR : 'assets/cmr.png';
+    return (typeof ASSETS !== 'undefined' && ASSETS.CMR) ? ASSETS.CMR : 'src/assets/cmr.png';
   },
   get oportunidadunica() {
-    return (typeof ASSETS !== 'undefined' && ASSETS.OPORTUNIDAD_UNICA) ? ASSETS.OPORTUNIDAD_UNICA : 'assets/oportunidadunica.png';
+    return (typeof ASSETS !== 'undefined' && ASSETS.OPORTUNIDAD_UNICA) ? ASSETS.OPORTUNIDAD_UNICA : 'src/assets/oportunidadunica.png';
   },
   get infocmf() {
-    return (typeof ASSETS !== 'undefined' && ASSETS.INFOCMF) ? ASSETS.INFOCMF : 'assets/infocmf.png';
+    return (typeof ASSETS !== 'undefined' && ASSETS.INFOCMF) ? ASSETS.INFOCMF : 'src/assets/infocmf.png';
   },
   get fpuntos() {
-    return (typeof ASSETS !== 'undefined' && ASSETS.FPUNTOS) ? ASSETS.FPUNTOS : 'assets/fpuntos.svg';
+    return (typeof ASSETS !== 'undefined' && ASSETS.FPUNTOS) ? ASSETS.FPUNTOS : 'src/assets/fpuntos.svg';
   }
 };
 

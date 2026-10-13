@@ -1,6 +1,6 @@
 # Servidor HTTP nativo de Windows (sin Node ni dependencias) usando .NET HttpListener
 $port = 3000
-$root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+$root = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $listener = New-Object System.Net.HttpListener
 $listener.Prefixes.Add("http://localhost:$port/")
 $listener.Prefixes.Add("http://127.0.0.1:$port/")
@@ -44,9 +44,14 @@ try {
             $localPath = Join-Path $root $cleanRel
 
             if (-not (Test-Path $localPath -PathType Leaf)) {
-                $fallback = Join-Path $root ("assets\" + $cleanRel)
-                if (Test-Path $fallback -PathType Leaf) {
-                    $localPath = $fallback
+                $srcFallback = Join-Path $root ("src\" + $cleanRel)
+                if (Test-Path $srcFallback -PathType Leaf) {
+                    $localPath = $srcFallback
+                } else {
+                    $fallback = Join-Path $root ("src\assets\" + $cleanRel)
+                    if (Test-Path $fallback -PathType Leaf) {
+                        $localPath = $fallback
+                    }
                 }
             }
 

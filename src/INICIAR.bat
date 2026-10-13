@@ -23,6 +23,6 @@ if %errorlevel% equ 0 (
 )
 
 echo [OK] Abriendo directamente en el navegador...
-start "" "%~dp0index.html"
+start "" "%~dp0..\index.html"
 
 :end

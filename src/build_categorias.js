@@ -34,8 +34,11 @@ const content = `/**
   async function loadCategoriesFromCSV() {
     try {
       if (window.location && window.location.protocol.startsWith("http")) {
-        const res = await fetch("assets/categorias_falabella.csv", { cache: "no-cache" });
-        if (res.ok) {
+        let res = await fetch("src/assets/categorias_falabella.csv", { cache: "no-cache" }).catch(() => null);
+        if (!res || !res.ok) {
+          res = await fetch("assets/categorias_falabella.csv", { cache: "no-cache" }).catch(() => null);
+        }
+        if (res && res.ok) {
           const text = await res.text();
           const lines = text.split(/\\r?\\n/)
             .map(l => l.trim().replace(/^"|"$/g, "").trim())
