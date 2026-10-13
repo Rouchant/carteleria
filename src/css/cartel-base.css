@@ -425,24 +425,44 @@
     gap: 5mm !important;
   }
 
-  /* En Celulares / Móviles: Escala automática al 90% (zoom: 0.90) para que entre en 1 sola hoja sin ajuste manual de escala */
+  /* En Celulares / Móviles: Escala real mediante CSS Transform (0.89) y compensación de flujo negativo
+     para que quepa en 1 sola hoja de AirPrint (iOS Safari) sin necesidad de ajustar la escala manualmente */
   .is-mobile-device .cartel-sheet.p118,
   body.is-mobile-device .cartel-sheet.p118,
   .is-mobile-device .cartel-sheet.t-6x4-sheet,
   body.is-mobile-device .cartel-sheet.t-6x4-sheet {
-    zoom: 0.90 !important;
-    margin: 0 auto !important;
+    transform: scale(0.89) !important;
+    transform-origin: top center !important;
+    margin: 0 auto -31mm auto !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
 
-  /* Fallback para dispositivos táctiles móviles en modo impresión */
-  @media (pointer: coarse) and (hover: none) {
+  /* Contenedores en móvil: limitados estrictamente a la altura imprimible de AirPrint (250mm) */
+  .is-mobile-device #cartelContainer,
+  body.is-mobile-device #cartelContainer {
+    max-height: 250mm !important;
+    overflow: hidden !important;
+  }
+
+  /* Media Query estándar por resolución de dispositivo móvil (iPhone / Android) */
+  @media print and (max-device-width: 900px) {
     .cartel-sheet.p118,
     .cartel-sheet.t-6x4-sheet {
-      zoom: 0.90 !important;
+      transform: scale(0.89) !important;
+      transform-origin: top center !important;
+      margin: 0 auto -31mm auto !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+    }
+
+    #cartelContainer {
+      max-height: 250mm !important;
+      overflow: hidden !important;
     }
   }
 
