@@ -5,8 +5,23 @@
 
 let dom = {};
 
+// Detección precisa de dispositivos móviles (teléfonos/tablets) para aplicar escala 90% en impresión móvil sin alterar PC
+function detectMobileDevice() {
+  const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isMobile) {
+    document.documentElement.classList.add('is-mobile-device');
+    document.body.classList.add('is-mobile-device');
+  } else {
+    document.documentElement.classList.remove('is-mobile-device');
+    document.body.classList.remove('is-mobile-device');
+  }
+  return isMobile;
+}
+
 // Inicialización de la aplicación al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
+  detectMobileDevice();
   initDOMReferences();
   bindEvents();
   syncFormFromState();
@@ -192,6 +207,7 @@ function bindEvents() {
 
   // Disparador de impresión con preparación previa del DOM (vital para Chrome en iOS y WKWebView)
   function triggerPrint() {
+    detectMobileDevice();
     const prevTab = dom.appLayout ? dom.appLayout.dataset.activeTab : 'editor';
 
     // 1. Asegurar que la pestaña activa sea preview para que el cartel esté visible en el render-tree móvil
@@ -229,8 +245,9 @@ function bindEvents() {
     triggerPrint();
   });
 
-  // Manejadores nativos para garantizar escala 1:1 en la impresión del navegador
+  // Manejadores nativos para garantizar escala adecuada en la impresión del navegador
   window.addEventListener('beforeprint', () => {
+    detectMobileDevice();
     if (dom.previewWrapper) {
       dom.previewWrapper.style.transform = 'none';
     }

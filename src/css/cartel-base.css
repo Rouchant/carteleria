@@ -405,12 +405,13 @@
     box-shadow: none !important;
   }
 
+  /* En PC / Escritorio: Formato Carta completo al 100% ocupando la página completa (216 x 279 mm) */
   .cartel-sheet.p118 {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 216mm !important;
-    max-height: 254mm !important;
-    padding: 10mm 14mm 8mm 14mm !important;
+    width: 216mm !important;
+    height: 279mm !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    padding: 16mm 14mm 12mm 14mm !important;
     box-sizing: border-box !important;
     margin: 0 auto !important;
     overflow: hidden !important;
@@ -421,7 +422,28 @@
   }
 
   .cartel-sheet.p118 .pricing-center {
-    gap: 3.5mm !important;
+    gap: 5mm !important;
+  }
+
+  /* En Celulares / Móviles: Escala automática al 90% (zoom: 0.90) para que entre en 1 sola hoja sin ajuste manual de escala */
+  .is-mobile-device .cartel-sheet.p118,
+  body.is-mobile-device .cartel-sheet.p118,
+  .is-mobile-device .cartel-sheet.t-6x4-sheet,
+  body.is-mobile-device .cartel-sheet.t-6x4-sheet {
+    zoom: 0.90 !important;
+    margin: 0 auto !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  /* Fallback para dispositivos táctiles móviles en modo impresión */
+  @media (pointer: coarse) and (hover: none) {
+    .cartel-sheet.p118,
+    .cartel-sheet.t-6x4-sheet {
+      zoom: 0.90 !important;
+    }
   }
 
   /* Guía / línea gris de corte para formatos menores a tamaño Carta (13x19, 15x21, 9x13, 9x7, 6x4, 12x3, etc.) */
