@@ -17,7 +17,26 @@
 </head>
 <body>
 
-  <div class="app-layout">
+  <div class="app-layout" id="appLayout" data-active-tab="editor">
+    <!-- BARRA DE PESTAÑAS MÓVIL (VISIBLE EN SMARTPHONES Y TABLETS) -->
+    <nav class="mobile-nav-bar" id="mobileNavBar" aria-label="Navegación Móvil">
+      <button type="button" class="mobile-nav-tab is-active" id="tabEditor" data-tab="editor">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        <span>Editar Datos</span>
+      </button>
+      <button type="button" class="mobile-nav-tab" id="tabPreview" data-tab="preview">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>Ver Cartel</span>
+        <span class="preview-badge-pill" id="previewBadge">En vivo</span>
+      </button>
+    </nav>
+
     <!-- PANEL LATERAL: Configuración y Datos -->
     <aside class="editor-sidebar" id="editorSidebar">
       <!-- Encabezado de la barra lateral -->
@@ -334,6 +353,14 @@
           </svg>
           <span>Descargar PDF</span>
         </button>
+
+        <button type="button" class="btn btn-view-mobile" id="btnViewCartelMobile" title="Ver vista previa del cartel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <span>Ver Cartel</span>
+        </button>
       </footer>
     </aside>
 
@@ -342,6 +369,12 @@
       <!-- Barra superior de control de visualización -->
       <div class="preview-toolbar">
         <div class="toolbar-left">
+          <button type="button" class="btn-back-mobile" id="btnBackEditorMobile" title="Volver al formulario de edición">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span>Editar</span>
+          </button>
           <div class="status-indicator">
             <span class="status-dot"></span>
             <span>Vista Previa en Vivo</span>
@@ -353,6 +386,7 @@
             <button class="zoom-btn" id="btnZoomOut" title="Reducir zoom">−</button>
             <span class="zoom-level" id="zoomLevelText">75%</span>
             <button class="zoom-btn" id="btnZoomIn" title="Aumentar zoom">+</button>
+            <button class="zoom-btn" id="btnZoomFit" title="Ajustar al ancho de pantalla" style="font-size: 11px; padding: 0 5px;">Ajustar</button>
             <button class="zoom-btn" id="btnZoomReset" title="Restablecer zoom" style="font-size: 11px; padding: 0 4px;">100%</button>
           </div>
         </div>
@@ -363,6 +397,27 @@
         <div class="preview-wrapper" id="previewWrapper">
           <div id="cartelContainer"></div>
         </div>
+      </div>
+
+      <!-- Barra de acciones rápidas para móvil (Imprimir y Descargar directo en preview) -->
+      <div class="mobile-preview-actions" id="mobilePreviewActions">
+        <button type="button" class="btn btn-secondary btn-mobile-action" id="btnPrintMobile" title="Imprimir directo o guardar como PDF">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Imprimir</span>
+        </button>
+
+        <button type="button" class="btn btn-primary btn-mobile-action" id="btnDownloadPdfMobile" title="Descargar PDF en alta resolución">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Descargar PDF</span>
+        </button>
       </div>
 
       <!-- Marca de agua de la interfaz -->

@@ -49,8 +49,19 @@ function initDOMReferences() {
     btnZoomIn: document.getElementById('btnZoomIn'),
     btnZoomOut: document.getElementById('btnZoomOut'),
     btnZoomReset: document.getElementById('btnZoomReset'),
+    btnZoomFit: document.getElementById('btnZoomFit'),
     btnPrint: document.getElementById('btnPrint'),
     btnDownloadPdf: document.getElementById('btnDownloadPdf'),
+
+    // Layout y Móvil
+    appLayout: document.getElementById('appLayout'),
+    canvasContainer: document.getElementById('canvasContainer'),
+    tabEditor: document.getElementById('tabEditor'),
+    tabPreview: document.getElementById('tabPreview'),
+    btnViewCartelMobile: document.getElementById('btnViewCartelMobile'),
+    btnBackEditorMobile: document.getElementById('btnBackEditorMobile'),
+    btnPrintMobile: document.getElementById('btnPrintMobile'),
+    btnDownloadPdfMobile: document.getElementById('btnDownloadPdfMobile'),
 
     // Selector de plantillas y presets
     templateCards: document.querySelectorAll('.template-card'),
@@ -159,12 +170,12 @@ function bindEvents() {
 
   // Zoom
   dom.btnZoomIn.addEventListener('click', () => {
-    state.zoom = Math.min(state.zoom + 0.1, 1.6);
+    state.zoom = Math.min(Math.round((state.zoom + 0.1) * 100) / 100, 1.8);
     applyZoom();
   });
 
   dom.btnZoomOut.addEventListener('click', () => {
-    state.zoom = Math.max(state.zoom - 0.1, 0.4);
+    state.zoom = Math.max(Math.round((state.zoom - 0.1) * 100) / 100, 0.2);
     applyZoom();
   });
 
@@ -172,6 +183,12 @@ function bindEvents() {
     state.zoom = state.zoom === 0.75 ? 1.0 : 0.75;
     applyZoom();
   });
+
+  if (dom.btnZoomFit) {
+    dom.btnZoomFit.addEventListener('click', () => {
+      autoFitZoom();
+    });
+  }
 
   // Botón Imprimir
   dom.btnPrint.addEventListener('click', () => {
@@ -201,12 +218,74 @@ function bindEvents() {
       applyPreset(type);
     });
   });
+
+  // Eventos de Navegación Móvil
+  if (dom.tabEditor) {
+    dom.tabEditor.addEventListener('click', () => switchMobileTab('editor'));
+  }
+  if (dom.tabPreview) {
+    dom.tabPreview.addEventListener('click', () => switchMobileTab('preview'));
+  }
+  if (dom.btnViewCartelMobile) {
+    dom.btnViewCartelMobile.addEventListener('click', () => switchMobileTab('preview'));
+  }
+  if (dom.btnBackEditorMobile) {
+    dom.btnBackEditorMobile.addEventListener('click', () => switchMobileTab('editor'));
+  }
+  if (dom.btnPrintMobile) {
+    dom.btnPrintMobile.addEventListener('click', () => window.print());
+  }
+  if (dom.btnDownloadPdfMobile) {
+    dom.btnDownloadPdfMobile.addEventListener('click', () => exportToPDF());
+  }
+
+  // Ajuste automático al redimensionar pantalla
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 900 && dom.appLayout && dom.appLayout.dataset.activeTab === 'preview') {
+      autoFitZoom();
+    }
+  });
 }
 
 // Aplicar zoom visual al preview
 function applyZoom() {
   dom.previewWrapper.style.transform = `scale(${state.zoom})`;
   dom.zoomLevelText.textContent = `${Math.round(state.zoom * 100)}%`;
+}
+
+// Cambiar pestaña activa en dispositivos móviles
+function switchMobileTab(tab) {
+  if (!dom.appLayout) return;
+  dom.appLayout.dataset.activeTab = tab;
+
+  if (dom.tabEditor && dom.tabPreview) {
+    dom.tabEditor.classList.toggle('is-active', tab === 'editor');
+    dom.tabPreview.classList.toggle('is-active', tab === 'preview');
+  }
+
+  if (tab === 'preview') {
+    setTimeout(() => {
+      autoFitZoom();
+    }, 40);
+  }
+}
+
+// Auto-ajustar zoom al ancho visible de pantalla
+function autoFitZoom() {
+  if (!dom.canvasContainer || !dom.cartelContainer) return;
+  const sheet = dom.cartelContainer.querySelector('.cartel-sheet') || dom.cartelContainer.firstElementChild;
+  if (!sheet) return;
+
+  const containerWidth = dom.canvasContainer.clientWidth;
+  const sheetWidth = sheet.offsetWidth || 794;
+
+  if (containerWidth > 0 && sheetWidth > 0) {
+    const isMobile = window.innerWidth <= 900;
+    const padding = isMobile ? 24 : 60;
+    const idealZoom = Math.min(Math.max((containerWidth - padding) / sheetWidth, 0.2), 1.4);
+    state.zoom = Math.round(idealZoom * 100) / 100;
+    applyZoom();
+  }
 }
 
 // Renderizador principal del Cartel en el DOM

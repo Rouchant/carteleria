@@ -594,27 +594,271 @@ input:focus, select:focus {
   }
 }
 
-/* Adaptabilidad en pantallas móviles reducidas */
-@media (max-width: 600px) {
-  .app-layout {
-    flex-direction: column;
-    height: auto;
-    overflow-y: auto;
+/* ==========================================================================
+   ELEMENTOS DE INTERFAZ MÓVIL (DESKTOP: OCULTOS)
+   ========================================================================== */
+.mobile-nav-bar {
+  display: none;
+}
+
+.btn-view-mobile {
+  display: none;
+}
+
+.btn-back-mobile {
+  display: none;
+}
+
+.mobile-preview-actions {
+  display: none;
+}
+
+/* ==========================================================================
+   OPTIMIZACIÓN MOBILE & TABLET (< 900px)
+   ========================================================================== */
+@media (max-width: 900px) {
+  body {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
   }
-  .editor-sidebar {
+
+  .app-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+  /* Barra de pestañas móvil superior */
+  .mobile-nav-bar {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 8px 12px;
+    gap: 8px;
+    z-index: 100;
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  }
+
+  .mobile-nav-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: var(--radius-md);
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-nav-tab:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+
+  .mobile-nav-tab.is-active {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(126, 168, 38, 0.35);
+  }
+
+  .preview-badge-pill {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-nav-tab:not(.is-active) .preview-badge-pill {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  /* Control de visualización por pestaña en móvil */
+  .app-layout[data-active-tab="editor"] .editor-sidebar {
+    display: flex;
+    flex: 1;
     width: 100%;
     max-width: 100%;
-    min-width: 100%;
-    height: auto;
+    min-width: 0;
+    height: 100%;
+    min-height: 0;
+    box-shadow: none;
+    border-right: none;
   }
-  .preview-stage {
-    min-height: 80vh;
+
+  .app-layout[data-active-tab="editor"] .preview-stage {
+    display: none;
   }
+
+  .app-layout[data-active-tab="preview"] .editor-sidebar {
+    display: none;
+  }
+
+  .app-layout[data-active-tab="preview"] .preview-stage {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  /* Botón Ver Cartel en Footer del Editor */
+  .btn-view-mobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #0f172a;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    flex: 1;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+    transition: var(--transition);
+  }
+
+  .btn-view-mobile:active {
+    transform: scale(0.98);
+  }
+
+  /* Botón Volver en Toolbar del Preview */
+  .btn-back-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: #334155;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 6px;
+    transition: var(--transition);
+  }
+
+  .btn-back-mobile:active {
+    background: #f1f5f9;
+  }
+
+  /* Barra de acciones rápidas sobre el preview en móvil */
+  .mobile-preview-actions {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+    z-index: 30;
+  }
+
+  .btn-mobile-action {
+    flex: 1;
+    padding: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+  }
+
+  /* Canvas preview en móvil */
+  .preview-canvas-container {
+    padding: 12px;
+  }
+
+  /* Formularios e inputs optimizados para touch */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    font-size: 16px; /* Previene auto-zoom molesto en Safari iOS */
+    padding: 10px 12px;
+    min-height: 42px;
+  }
+
+  .template-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .preset-bar {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .preset-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .preset-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .sidebar-footer {
+    padding: 12px 14px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-footer .btn {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .app-watermark {
+    display: none; /* Evita tapar controles en pantallas compactas */
+  }
+}
+
+@media (max-width: 480px) {
   .template-selector-grid {
     grid-template-columns: 1fr;
   }
-  .field-grid {
-    grid-template-columns: 1fr;
+
+  .mobile-preview-actions {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 12px;
   }
 }
 
