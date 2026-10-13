@@ -425,22 +425,47 @@
     gap: 5mm !important;
   }
 
-  /* En Celulares / Móviles: Escala real mediante CSS Transform (0.89) y compensación de flujo negativo
-     para que quepa en 1 sola hoja de AirPrint (iOS Safari) sin necesidad de ajustar la escala manualmente */
+  /* En Celulares / Móviles: Adaptación geométrica directa (sin depender de transform/zoom)
+     Compensa los márgenes externos y cabeceras que añaden Safari y Chrome en iOS (AirPrint)
+     para que quepa al 100% en 1 sola hoja Carta sin tocar escala */
   .is-mobile-device .cartel-sheet.p118,
-  body.is-mobile-device .cartel-sheet.p118,
-  .is-mobile-device .cartel-sheet.t-6x4-sheet,
-  body.is-mobile-device .cartel-sheet.t-6x4-sheet {
-    transform: scale(0.89) !important;
-    transform-origin: top center !important;
-    margin: 0 auto -31mm auto !important;
+  body.is-mobile-device .cartel-sheet.p118 {
+    width: 100% !important;
+    max-width: 198mm !important;
+    height: 250mm !important;
+    max-height: 250mm !important;
+    padding: 6mm 10mm 4mm 10mm !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    justify-content: space-between !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
 
-  /* Contenedores en móvil: limitados estrictamente a la altura imprimible de AirPrint (250mm) */
+  .is-mobile-device .cartel-sheet.p118 .pricing-center,
+  body.is-mobile-device .cartel-sheet.p118 .pricing-center {
+    gap: 3.5mm !important;
+  }
+
+  .is-mobile-device .cartel-sheet.p118 .product-header,
+  body.is-mobile-device .cartel-sheet.p118 .product-header {
+    margin-bottom: 1.5mm !important;
+  }
+
+  .is-mobile-device .cartel-sheet.t-6x4-sheet,
+  body.is-mobile-device .cartel-sheet.t-6x4-sheet {
+    width: 100% !important;
+    max-width: 198mm !important;
+    height: 250mm !important;
+    max-height: 250mm !important;
+    padding: 6mm 10mm 4mm 10mm !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+  }
+
   .is-mobile-device #cartelContainer,
   body.is-mobile-device #cartelContainer {
     max-height: 250mm !important;
@@ -449,15 +474,38 @@
 
   /* Media Query estándar por resolución de dispositivo móvil (iPhone / Android) */
   @media print and (max-device-width: 900px) {
-    .cartel-sheet.p118,
-    .cartel-sheet.t-6x4-sheet {
-      transform: scale(0.89) !important;
-      transform-origin: top center !important;
-      margin: 0 auto -31mm auto !important;
+    .cartel-sheet.p118 {
+      width: 100% !important;
+      max-width: 198mm !important;
+      height: 250mm !important;
+      max-height: 250mm !important;
+      padding: 6mm 10mm 4mm 10mm !important;
+      margin: 0 auto !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      justify-content: space-between !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
       page-break-after: avoid !important;
       break-after: avoid !important;
+    }
+
+    .cartel-sheet.p118 .pricing-center {
+      gap: 3.5mm !important;
+    }
+
+    .cartel-sheet.p118 .product-header {
+      margin-bottom: 1.5mm !important;
+    }
+
+    .cartel-sheet.t-6x4-sheet {
+      width: 100% !important;
+      max-width: 198mm !important;
+      height: 250mm !important;
+      max-height: 250mm !important;
+      padding: 6mm 10mm 4mm 10mm !important;
+      margin: 0 auto !important;
+      overflow: hidden !important;
     }
 
     #cartelContainer {
