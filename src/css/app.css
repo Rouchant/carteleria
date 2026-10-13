@@ -616,7 +616,7 @@ input:focus, select:focus {
 /* ==========================================================================
    OPTIMIZACIÓN MOBILE & TABLET (< 900px)
    ========================================================================== */
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
   body {
     overflow: hidden;
     height: 100vh;
@@ -850,7 +850,7 @@ input:focus, select:focus {
   }
 }
 
-@media (max-width: 480px) {
+@media screen and (max-width: 480px) {
   .template-selector-grid {
     grid-template-columns: 1fr;
   }
@@ -859,6 +859,22 @@ input:focus, select:focus {
     flex-direction: column;
     gap: 8px;
     padding: 10px 12px;
+  }
+}
+
+/* ==========================================================================
+   ESTILOS DE IMPRESIÓN LIMPIOS (CERO INTERFAZ O PESTAÑAS MÓVILES EN IMPRESIÓN)
+   ========================================================================== */
+@media print {
+  .mobile-nav-bar,
+  .mobile-preview-actions,
+  .btn-view-mobile,
+  .btn-back-mobile,
+  .editor-sidebar,
+  .preview-toolbar,
+  .app-watermark,
+  .toast-container {
+    display: none !important;
   }
 }
 

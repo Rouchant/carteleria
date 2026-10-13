@@ -343,6 +343,10 @@
 
   .editor-sidebar,
   .preview-toolbar,
+  .mobile-nav-bar,
+  .mobile-preview-actions,
+  .btn-view-mobile,
+  .btn-back-mobile,
   .toast-container,
   .app-watermark {
     display: none !important;
