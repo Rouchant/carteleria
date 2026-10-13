@@ -305,15 +305,6 @@
   size: auto;
 }
 
-@page carta {
-  size: letter portrait;
-  margin: 0;
-}
-
-.cartel-sheet.p118 {
-  page: carta;
-}
-
 /* Estilos de Impresión Nativa (Ctrl+P / Botón Imprimir) */
 @media print {
   @page {
@@ -390,7 +381,7 @@
 
   .cartel-sheet {
     box-shadow: none !important;
-    margin: 0 auto !important;
+    margin: 0 !important;
     page-break-after: avoid !important;
     page-break-before: avoid !important;
     page-break-inside: avoid !important;
@@ -414,9 +405,12 @@
   }
 
   .cartel-sheet.p118 {
-    width: 215.9mm !important;
-    height: 279.4mm !important;
+    width: 100% !important;
+    height: 100% !important;
     max-width: 100% !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
   }
 
   /* Guía / línea gris de corte para formatos menores a tamaño Carta (13x19, 15x21, 9x13, 9x7, 6x4, 12x3, etc.) */
