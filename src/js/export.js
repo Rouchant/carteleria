@@ -77,12 +77,58 @@ async function exportToPDF() {
       height: sheetHeight,
       scrollX: 0,
       scrollY: 0,
-      windowWidth: sheetWidth + 50,
-      windowHeight: sheetHeight + 50,
+      windowWidth: Math.max(1200, sheetWidth + 100),
+      windowHeight: Math.max(1200, sheetHeight + 100),
       useCORS: true,
       logging: false,
       backgroundColor: '#ffffff',
       onclone: (clonedDoc) => {
+        // Asegurar que appLayout esté en 'preview' y no oculte el contenedor por media query móvil
+        const clonedLayout = clonedDoc.getElementById('appLayout');
+        if (clonedLayout) {
+          clonedLayout.setAttribute('data-active-tab', 'preview');
+        }
+
+        // Inyectar estilos para asegurar que el área de previsualización sea 100% visible en el clon
+        const exportFixStyle = clonedDoc.createElement('style');
+        exportFixStyle.textContent = `
+          .app-layout[data-active-tab="editor"] .preview-stage,
+          .preview-stage {
+            display: block !important;
+            visibility: visible !important;
+            width: auto !important;
+            height: auto !important;
+            overflow: visible !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+          .editor-sidebar,
+          .mobile-nav-bar,
+          .preview-toolbar,
+          .mobile-preview-actions,
+          .app-watermark {
+            display: none !important;
+          }
+          .preview-canvas-container {
+            display: block !important;
+            width: auto !important;
+            height: auto !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            overflow: visible !important;
+          }
+          .preview-wrapper {
+            display: block !important;
+            width: auto !important;
+            height: auto !important;
+            transform: none !important;
+            transition: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+        `;
+        clonedDoc.head.appendChild(exportFixStyle);
+
         const clonedWrapper = clonedDoc.getElementById('previewWrapper');
         if (clonedWrapper) {
           clonedWrapper.style.transition = 'none';
