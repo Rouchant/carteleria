@@ -692,11 +692,46 @@
     .p118 .solo-normal-big-price { font-size: 68pt !important; margin-bottom: 1.5mm !important; }
     .p118 .todo-medio-label { font-size: 16pt !important; margin-bottom: 1mm !important; }
     .p118 .todo-medio-label + .price-cmr-value { font-size: 64pt !important; margin-bottom: 1mm !important; }
-    .p118 .bottom-footer { padding-top: 1mm !important; align-items: flex-end !important; }
-    .p118 .legal-box { width: 78% !important; font-size: 4.8pt !important; line-height: 1.2 !important; }
-    .p118 .vigencia-text { font-size: 6.5pt !important; margin-bottom: 1mm !important; }
+    .p118 .bottom-footer { padding-top: 1mm !important; align-items: flex-end !important; position: relative !important; }
+    .legal-box,
+    .p118 .legal-box {
+      width: 78% !important;
+      font-size: 4.8pt !important;
+      line-height: 1.15 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+      gap: 0.5mm !important;
+      height: auto !important;
+    }
+    .vigencia-text,
+    .p118 .vigencia-text {
+      font-size: 6.5pt !important;
+      margin-bottom: 0 !important;
+      line-height: 1.15 !important;
+    }
+    .legal-cmf-img,
+    .p118 .legal-cmf-img {
+      width: 100% !important;
+      max-width: 145mm !important;
+      height: auto !important;
+      aspect-ratio: 1303 / 114 !important;
+      object-fit: fill !important;
+      object-position: top left !important;
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
     .p118 .fpuntos-badge { width: 14mm !important; height: 14mm !important; }
-    .p118 .template-code-badge { position: static !important; font-size: 6pt !important; display: block !important; margin-top: 0.5mm !important; }
+    .p118 .template-code-badge {
+      position: absolute !important;
+      bottom: 0 !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      font-size: 6pt !important;
+      display: block !important;
+    }
 
     .cartel-sheet.t-6x4-sheet {
       width: 100% !important;
