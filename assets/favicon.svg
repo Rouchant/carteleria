@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="falabellaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a4d233"/>
+      <stop offset="100%" stop-color="#76a81e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#falabellaGrad)"/>
+  <path d="M21 14.5 h22 v7.5 h-13.5 v8 h11.5 v7 h-11.5 v12.5 h-8.5 z" fill="#ffffff"/>
+</svg>

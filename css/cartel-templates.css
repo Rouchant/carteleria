@@ -1,0 +1,755 @@
+/* ========================================================
+   Dimensiones y Adaptaciones por Formato de Cartel
+   ======================================================== */
+
+/* --------------------------------------------------------
+   1. P_118 (Tamaño Carta Vertical - 216 x 279 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.p118 {
+  width: 216mm;
+  height: 279mm;
+  padding: 16mm 14mm 12mm 14mm;
+  justify-content: space-between;
+}
+
+.p118 .top-header-row { min-height: 18mm; margin-bottom: 2mm; }
+.p118 .online-slogan { font-size: 13pt; padding-top: 1mm; }
+.p118 .qr-box { width: 18mm; height: 18mm; }
+.p118 .product-header { margin-top: -1mm; margin-bottom: 3.5mm; }
+.p118 .brand-name { font-size: 38pt; }
+.p118 .category-name { font-size: 21pt; margin-top: 2mm; }
+.p118 .model-sku-row { font-size: 14pt; margin-top: 2.2mm; }
+.p118 .pricing-center { gap: 5mm; }
+.p118 .cmr-badge-combo { gap: 3mm; margin-bottom: -3.5mm; }
+.p118 .oportunidad-img { height: 22mm; }
+.p118 .cmr-card-img { height: 22mm; }
+.p118 .price-cmr-value { font-size: 74pt; margin-bottom: 1.5mm; }
+.p118 .cuotas-line-1 { font-size: 19pt; margin-top: 2.5mm; }
+.p118 .cuotas-line-2 { font-size: 13.5pt; margin-top: 1.5mm; }
+.p118 .price-oferta-block { margin-top: 5mm; }
+.p118 .price-oferta-value { font-size: 58pt; margin-bottom: 1.2mm; }
+.p118 .price-oferta-label { font-size: 19pt; margin-top: 2.5mm; }
+.p118 .price-normal-block { margin-top: 5mm; }
+.p118 .price-normal-value { font-size: 50pt; margin-bottom: 1.2mm; }
+.p118 .price-normal-label { font-size: 18pt; margin-top: 2.5mm; font-weight: 400; }
+.p118 .solo-normal-big-price { font-size: 88pt; margin-bottom: 4mm; }
+.p118 .todo-medio-label { font-size: 22pt; font-weight: 700; margin-bottom: 2mm; }
+.p118 .todo-medio-label + .price-cmr-value { font-size: 82pt; margin-bottom: 2mm; }
+.p118 .todo-medio-label ~ .price-normal-block .price-normal-value { font-size: 58pt; }
+.p118 .cuotas-cmr-row { gap: 3.5mm; margin: 3.5mm 0; }
+.p118 .cuotas-cmr-row .cmr-mini-card { height: 13.5mm; }
+.p118 .cuotas-cmr-row .cuotas-line-1 { font-size: 18pt; }
+.p118 .cuotas-cmr-row .cuotas-line-2 { font-size: 14pt; }
+.p118 .bottom-footer { padding-top: 3.5mm; }
+.p118 .legal-box { width: 80%; font-size: 5.6pt; line-height: 1.4; }
+.p118 .vigencia-text { font-size: 7pt; margin-bottom: 2mm; }
+.p118 .legal-cmf-img { max-width: 152mm; }
+.p118 .fpuntos-badge { width: 22mm; height: 22mm; flex-shrink: 0; }
+.p118 .template-code-badge {
+  position: absolute;
+  bottom: -3mm;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7.5pt;
+}
+
+/* --------------------------------------------------------
+   2. P_132 (Góndola Vertical - 130 x 190 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.p132 {
+  width: 130mm;
+  height: 190mm;
+  padding: 10mm 9mm 8mm 9mm;
+  justify-content: space-between;
+}
+
+.p132 .top-header-row { min-height: 14mm; margin-bottom: 1.5mm; }
+.p132 .online-slogan { font-size: 6.2pt; padding-top: 1mm; line-height: 1.25; max-width: 86mm; }
+.p132 .qr-box { width: 13mm; height: 13mm; }
+.p132 .brand-name { font-size: 27pt; }
+.p132 .category-name { font-size: 15pt; margin-top: 1.5mm; }
+.p132 .model-sku-row { font-size: 10pt; margin-top: 1.5mm; }
+.p132 .pricing-center { gap: 3.5mm; }
+.p132 .cmr-badge-combo { gap: 2.2mm; margin-bottom: -2mm; }
+.p132 .oportunidad-img { height: 16mm; }
+.p132 .cmr-card-img { height: 16mm; }
+.p132 .price-cmr-value { font-size: 40pt; }
+.p132 .cuotas-line-1 { font-size: 13pt; margin-top: 1.8mm; }
+.p132 .cuotas-line-2 { font-size: 9.5pt; margin-top: 1mm; }
+.p132 .price-oferta-block { margin-top: 3mm; }
+.p132 .price-oferta-value { font-size: 33pt; }
+.p132 .price-oferta-label { font-size: 13pt; margin-top: 1.8mm; }
+.p132 .price-normal-block { margin-top: 3mm; }
+.p132 .price-normal-value { font-size: 28pt; }
+.p132 .price-normal-label { font-size: 12pt; margin-top: 1.8mm; font-weight: 400; }
+.p132 .solo-normal-big-price { font-size: 48pt; }
+.p132 .todo-medio-label { font-size: 14pt; }
+.p132 .cuotas-cmr-row { gap: 2.5mm; margin: 2mm 0; }
+.p132 .cuotas-cmr-row .cmr-mini-card { height: 9.5mm; }
+.p132 .cuotas-cmr-row .cuotas-line-1 { font-size: 11pt; }
+.p132 .cuotas-cmr-row .cuotas-line-2 { font-size: 8.5pt; }
+.p132 .bottom-footer { padding-top: 2.5mm; display: flex; justify-content: space-between; align-items: flex-end; width: 100%; position: relative; }
+.p132 .legal-box { width: 76%; font-size: 4.2pt; line-height: 1.35; }
+.p132 .vigencia-text { font-size: 5pt; margin-bottom: 1.2mm; }
+.p132 .legal-cmf-img { max-width: 80mm; }
+.p132 .fpuntos-badge { width: 12mm; height: 12mm; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.p132 .template-code-badge {
+  position: absolute;
+  bottom: -3mm;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6pt;
+}
+
+/* --------------------------------------------------------
+   3. 15x21 (Pedestal Mediano - 150 x 210 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.t-15x21 {
+  width: 150mm;
+  height: 210mm;
+  padding: 11mm 10mm 9mm 10mm;
+  justify-content: space-between;
+}
+
+.t-15x21 .top-header-row { min-height: 15mm; margin-bottom: 2mm; }
+.t-15x21 .online-slogan { font-size: 10pt; padding-top: 1mm; }
+.t-15x21 .qr-box { width: 15mm; height: 15mm; }
+.t-15x21 .brand-name { font-size: 29pt; }
+.t-15x21 .category-name { font-size: 16pt; margin-top: 1.5mm; }
+.t-15x21 .model-sku-row { font-size: 11pt; margin-top: 1.5mm; }
+.t-15x21 .pricing-center { gap: 4mm; }
+.t-15x21 .cmr-badge-combo { gap: 2.5mm; margin-bottom: -2.5mm; }
+.t-15x21 .oportunidad-img { height: 17.5mm; }
+.t-15x21 .cmr-card-img { height: 17.5mm; }
+.t-15x21 .price-cmr-value { font-size: 45pt; }
+.t-15x21 .cuotas-line-1 { font-size: 14pt; margin-top: 2mm; }
+.t-15x21 .cuotas-line-2 { font-size: 10pt; margin-top: 1mm; }
+.t-15x21 .price-oferta-block { margin-top: 3.5mm; }
+.t-15x21 .price-oferta-value { font-size: 36pt; }
+.t-15x21 .price-oferta-label { font-size: 14pt; margin-top: 2mm; }
+.t-15x21 .price-normal-block { margin-top: 3.5mm; }
+.t-15x21 .price-normal-value { font-size: 31pt; }
+.t-15x21 .price-normal-label { font-size: 13pt; margin-top: 2mm; font-weight: 400; }
+.t-15x21 .solo-normal-big-price { font-size: 52pt; }
+.t-15x21 .todo-medio-label { font-size: 15pt; }
+.t-15x21 .cuotas-cmr-row { gap: 3mm; margin: 2.2mm 0; }
+.t-15x21 .cuotas-cmr-row .cmr-mini-card { height: 10.5mm; }
+.t-15x21 .cuotas-cmr-row .cuotas-line-1 { font-size: 12.5pt; }
+.t-15x21 .cuotas-cmr-row .cuotas-line-2 { font-size: 10pt; }
+.t-15x21 .bottom-footer { padding-top: 2.5mm; }
+.t-15x21 .legal-box { width: 78%; font-size: 4.5pt; line-height: 1.35; }
+.t-15x21 .vigencia-text { font-size: 5.2pt; margin-bottom: 1.2mm; }
+.t-15x21 .legal-cmf-img { max-width: 95mm; }
+.t-15x21 .fpuntos-badge { width: 13mm; height: 13mm; flex-shrink: 0; }
+.t-15x21 .template-code-badge {
+  position: absolute;
+  bottom: -3mm;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 6.5pt;
+}
+
+/* --------------------------------------------------------
+   4. 9x13 (Pedestal Compacto - 90 x 130 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.t-9x13 {
+  width: 90mm;
+  height: 130mm;
+  padding: 7mm 6mm 6mm 6mm;
+  justify-content: space-between;
+}
+
+.t-9x13 .top-header-row { min-height: 11mm; margin-bottom: 1mm; }
+.t-9x13 .online-slogan { font-size: 7pt; }
+.t-9x13 .qr-box { width: 10mm; height: 10mm; }
+.t-9x13 .brand-name { font-size: 19pt; }
+.t-9x13 .category-name { font-size: 10.5pt; margin-top: 1mm; }
+.t-9x13 .model-sku-row { font-size: 7.5pt; margin-top: 1mm; }
+.t-9x13 .pricing-center { gap: 2.5mm; }
+.t-9x13 .cmr-badge-combo { gap: 1.5mm; margin-bottom: -1.5mm; }
+.t-9x13 .oportunidad-img { height: 11.5mm; }
+.t-9x13 .cmr-card-img { height: 11.5mm; }
+.t-9x13 .price-cmr-value { font-size: 28pt; }
+.t-9x13 .cuotas-line-1 { font-size: 9.5pt; margin-top: 1.2mm; }
+.t-9x13 .cuotas-line-2 { font-size: 7pt; margin-top: 0.8mm; }
+.t-9x13 .price-oferta-block { margin-top: 2mm; }
+.t-9x13 .price-oferta-value { font-size: 23pt; }
+.t-9x13 .price-oferta-label { font-size: 9.5pt; margin-top: 1.2mm; }
+.t-9x13 .price-normal-block { margin-top: 2mm; }
+.t-9x13 .price-normal-value { font-size: 20pt; }
+.t-9x13 .price-normal-label { font-size: 9pt; margin-top: 1.2mm; font-weight: 400; }
+.t-9x13 .solo-normal-big-price { font-size: 34pt; }
+.t-9x13 .todo-medio-label { font-size: 10pt; }
+.t-9x13 .cuotas-cmr-row { gap: 2mm; margin: 1.5mm 0; }
+.t-9x13 .cuotas-cmr-row .cmr-mini-card { height: 7mm; }
+.t-9x13 .cuotas-cmr-row .cuotas-line-1 { font-size: 8pt; }
+.t-9x13 .cuotas-cmr-row .cuotas-line-2 { font-size: 6.5pt; }
+.t-9x13 .bottom-footer { padding-top: 1.5mm; }
+.t-9x13 .legal-box { width: 100%; font-size: 3.2pt; line-height: 1.3; }
+.t-9x13 .vigencia-text { font-size: 4pt; margin-bottom: 0.8mm; }
+.t-9x13 .legal-cmf-img { max-width: 76mm; }
+.t-9x13 .template-code-badge {
+  position: absolute;
+  bottom: -2mm;
+  right: 0;
+  font-size: 5pt;
+}
+
+/* --------------------------------------------------------
+   5. 9x7 (Ficha Mesón Horizontal - 90 x 70 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.t-9x7 {
+  width: 90mm;
+  height: 70mm;
+  padding: 4mm 5mm 3mm 5mm;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.cartel-sheet.t-9x7.tri-price {
+  padding: 3.2mm 4.5mm 2.2mm 4.5mm;
+}
+
+.t-9x7 .product-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.t-9x7 .brand-name {
+  font-size: 16pt;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #000000;
+  line-height: 1.1;
+  letter-spacing: normal;
+}
+
+.t-9x7.tri-price .brand-name {
+  font-size: 13.5pt;
+  letter-spacing: 0.2px;
+}
+
+.t-9x7 .category-name {
+  font-size: 9.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #111111;
+  margin-top: 0.8mm;
+  line-height: 1.1;
+}
+
+.t-9x7.tri-price .category-name {
+  font-size: 7.8pt;
+  margin-top: 0.4mm;
+}
+
+.t-9x7 .model-sku-row {
+  font-size: 6.8pt;
+  font-weight: 400;
+  color: #222222;
+  margin-top: 0.8mm;
+  line-height: 1.1;
+}
+
+.t-9x7.tri-price .model-sku-row {
+  font-size: 5.8pt;
+  margin-top: 0.4mm;
+}
+
+.t-9x7 .pricing-center {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto 0;
+}
+
+/* Badges CMR y Oportunidad Única para 9x7 */
+.t-9x7 .cmr-badge-combo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2mm;
+  margin-top: 0.8mm;
+  margin-bottom: 0.4mm;
+}
+
+.t-9x7 .oportunidad-img {
+  height: 7.2mm;
+  width: auto;
+  object-fit: contain;
+}
+
+.t-9x7 .cmr-card-img {
+  height: 7.2mm;
+  width: auto;
+  border-radius: 1px;
+  object-fit: contain;
+}
+
+.t-9x7 .price-cmr-value {
+  font-family: 'LINESeedJP', sans-serif;
+  font-size: 22.5pt;
+  font-weight: 700;
+  color: #df0024;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.t-9x7.has-cmr:not(.tri-price) .price-cmr-value {
+  font-size: 26pt;
+}
+
+/* Cuotas centradas (sin tarjeta mini lateral en modo CMR/Tri-precio) */
+.t-9x7 .cuotas-cmr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.6mm;
+  line-height: 1.15;
+}
+
+.t-9x7 .cuotas-cmr-block .cuotas-line-1 {
+  font-size: 6.8pt;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.15;
+}
+
+.t-9x7 .cuotas-cmr-block .cuotas-line-2 {
+  font-size: 5.2pt;
+  font-weight: 400;
+  color: #333333;
+  line-height: 1.15;
+  margin-top: 0.2mm;
+}
+
+/* Bloque Oferta para 9x7 Tri-precio (Precio negro + OTRO MEDIO DE PAGO) */
+.t-9x7 .price-oferta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.2mm;
+}
+
+.t-9x7 .price-oferta-block .price-oferta-value {
+  font-family: 'LINESeedJP', sans-serif;
+  font-size: 16.5pt;
+  font-weight: 700;
+  color: #000000;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.t-9x7 .price-oferta-block .price-oferta-label {
+  font-size: 6.8pt;
+  font-weight: 800;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  line-height: 1.15;
+  margin-top: 0.3mm;
+}
+
+/* Modo Oferta clásica sin CMR (P_130) */
+.t-9x7 .price-oferta-header {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #df0024;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+}
+
+.t-9x7:not(.tri-price) > .pricing-center > .price-oferta-value,
+.t-9x7 .pricing-center > .price-oferta-value {
+  font-family: 'LINESeedJP', sans-serif;
+  font-size: 32pt;
+  font-weight: 700;
+  color: #df0024;
+  line-height: 1.05;
+  margin-top: 0.5mm;
+  letter-spacing: -0.035em;
+}
+
+.t-9x7 .cuotas-cmr-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2mm;
+  margin-top: 1.5mm;
+}
+
+.t-9x7 .cuotas-cmr-row .cmr-mini-card {
+  height: 6.8mm;
+  width: auto;
+  border-radius: 1px;
+}
+
+.t-9x7 .cuotas-cmr-row .cuotas-texts {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.t-9x7 .cuotas-cmr-row .cuotas-line-1 {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.15;
+}
+
+.t-9x7 .cuotas-cmr-row .cuotas-line-2 {
+  font-size: 6.2pt;
+  font-weight: 400;
+  color: #444444;
+  line-height: 1.15;
+}
+
+.t-9x7 .price-normal-row {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  margin-top: 1.8mm;
+  line-height: 1.1;
+}
+
+.t-9x7.tri-price .price-normal-row {
+  font-size: 7.2pt;
+  font-weight: 400;
+  color: #000000;
+  text-transform: uppercase;
+  margin-top: 1mm;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1mm;
+}
+
+.t-9x7 .price-normal-row .val {
+  font-family: 'LINESeedJP', sans-serif;
+  font-weight: 700;
+}
+
+.t-9x7 .bottom-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 1mm;
+}
+
+.t-9x7.tri-price .bottom-footer {
+  padding-top: 0.6mm;
+}
+
+.t-9x7 .vigencia-text {
+  font-size: 4.8pt;
+  font-weight: 400;
+  color: #212121;
+  text-align: left;
+}
+
+.t-9x7 .template-code-badge {
+  font-size: 5.5pt;
+  font-weight: 600;
+  color: #555555;
+  text-align: right;
+  position: static;
+  transform: none;
+}
+
+/* --------------------------------------------------------
+   6. P_121 (Ficha Mostrador - 140 x 95 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.p121 {
+  width: 140mm;
+  height: 95mm;
+  padding: 6mm 8mm 5mm 8mm;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.p121 .product-header { margin-bottom: 1.5mm; }
+.p121 .brand-name { font-size: 22pt; }
+.p121 .category-name { font-size: 11pt; margin-top: 0.8mm; }
+.p121 .model-sku-row { font-size: 8pt; margin-top: 0.8mm; }
+.p121 .cmr-badge-combo { gap: 1.8mm; margin-bottom: -1.5mm; }
+.p121 .oportunidad-img { height: 11.5mm; }
+.p121 .cmr-card-img { height: 11.5mm; border-radius: 1px; }
+.p121 .price-cmr-value { font-size: 30pt; line-height: 1.15; }
+.p121 .cuotas-line-1 { font-size: 9.5pt; margin-top: 1.2mm; }
+.p121 .cuotas-line-2 { font-size: 7pt; }
+.p121 .price-oferta-block { margin-top: 2mm; }
+.p121 .price-oferta-value { font-size: 24pt; line-height: 1.15; }
+.p121 .price-oferta-label { font-size: 9pt; margin-top: 0.8mm; }
+.p121 .price-normal-inline {
+  margin-top: 2mm;
+  font-size: 8.5pt;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2mm;
+}
+.p121 .price-normal-inline .val { font-size: 12pt; font-weight: 400; }
+.p121 .template-code-badge { position: absolute; bottom: 2mm; right: 4mm; font-size: 5.5pt; }
+
+/* --------------------------------------------------------
+   7. P_123 (Cenefa / Fleje Horizontal - 210 x 48 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.p123 {
+  width: 210mm;
+  height: 48mm;
+  padding: 4mm 6mm;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.p123 .left-col {
+  width: 48%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-right: 5mm;
+}
+
+.p123 .brand-name { font-size: 20pt; }
+.p123 .model-sku-block { font-size: 8.5pt; font-weight: 700; color: #222; margin-top: 1mm; }
+.p123 .category-name { font-size: 12pt; font-weight: 700; color: #111; margin-top: 1mm; }
+.p123 .vigencia-text { font-size: 5.5pt; font-weight: 400; color: #212121; }
+.p123 .divider-line { width: 1.2px; height: 92%; background-color: #000; }
+
+.p123 .right-col {
+  width: 48%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+}
+
+.p123 .cmr-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2.5mm;
+  width: 100%;
+}
+
+.p123 .cmr-badge-combo { gap: 1.5mm; margin: 0; }
+.p123 .oportunidad-img { height: 12mm; }
+.p123 .cmr-card-img { height: 12mm; border-radius: 1.5px; }
+.p123 .price-cmr-value { font-size: 28pt; line-height: 1.15; }
+.p123 .price-oferta-main-label { font-size: 8.5pt; font-weight: 800; color: #df0024; text-transform: uppercase; white-space: nowrap; }
+
+.p123 .oferta-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 2mm;
+  margin-top: 0.8mm;
+  width: 100%;
+}
+.p123 .price-oferta-label { font-size: 7.5pt; font-weight: 800; color: #000; }
+.p123 .price-oferta-value { font-size: 16pt; line-height: 1.15; color: #000; }
+
+.p123 .normal-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 2mm;
+  margin-top: 0.8mm;
+  width: 100%;
+}
+.p123 .price-normal-label { font-size: 7.5pt; font-weight: 400; color: #000; }
+.p123 .price-normal-value { font-size: 18pt; line-height: 1.15; color: #000; }
+
+/* Cuando conviven los 3 precios simultáneos (CMR + Oferta + Normal) en P_123 */
+.p123 .right-col.tri-price .oportunidad-img { height: 10mm; }
+.p123 .right-col.tri-price .cmr-card-img { height: 10mm; }
+.p123 .right-col.tri-price .price-cmr-value { font-size: 23pt; }
+.p123 .right-col.tri-price .oferta-row { margin-top: 0.4mm; gap: 1.5mm; }
+.p123 .right-col.tri-price .price-oferta-label { font-size: 5.5pt; }
+.p123 .right-col.tri-price .price-oferta-value { font-size: 13.5pt; }
+.p123 .right-col.tri-price .normal-row.pequeno { margin-top: 0.4mm; gap: 1.5mm; }
+.p123 .right-col.tri-price .normal-row.pequeno .price-normal-label { font-size: 5pt; color: #444; }
+.p123 .right-col.tri-price .normal-row.pequeno .price-normal-value { font-size: 10pt; color: #444; }
+
+.p123 .template-code-badge { position: absolute; bottom: -2mm; right: 0; font-size: 5.5pt; }
+
+/* --------------------------------------------------------
+   8. 12x3 (Fleje Angosto - 120 x 30 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.t-12x3 {
+  width: 120mm;
+  height: 30mm;
+  padding: 2.5mm 4mm;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.t-12x3 .left-col {
+  width: 44mm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.t-12x3 .brand-name { font-size: 11pt; }
+.t-12x3 .prod-sku { font-size: 5.5pt; font-weight: 700; color: #222; margin-top: 0.8mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-12x3 .prod-cat { font-size: 7.5pt; font-weight: 700; color: #111; margin-top: 0.5mm; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-12x3 .vigencia-text { font-size: 4.2pt; font-weight: 400; color: #212121; }
+.t-12x3 .divider-line { width: 0.8px; height: 90%; }
+
+.t-12x3 .right-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  padding-left: 2mm;
+}
+
+.t-12x3 .cmr-row { display: flex; align-items: center; justify-content: flex-end; gap: 1.8mm; }
+.t-12x3 .cmr-badge-combo { gap: 1mm; margin: 0; }
+.t-12x3 .oportunidad-img { height: 8mm; }
+.t-12x3 .cmr-card-img { height: 8mm; border-radius: 1px; }
+.t-12x3 .price-cmr-value { font-size: 18.5pt; line-height: 1.15; }
+.t-12x3 .price-oferta-main-label { font-size: 5.8pt; font-weight: 800; color: #df0024; text-transform: uppercase; white-space: nowrap; letter-spacing: 0.2px; }
+.t-12x3 .oferta-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 1.5mm; margin-top: 0.5mm; }
+.t-12x3 .price-oferta-label-12x3 { font-size: 4.8pt; color: #000; }
+.t-12x3 .price-oferta-value-12x3 { font-size: 10.5pt; color: #000; line-height: 1.15; }
+.t-12x3 .normal-row { display: flex; align-items: baseline; justify-content: flex-end; gap: 1.5mm; margin-top: 0.5mm; }
+.t-12x3 .normal-row.pequeno { margin-top: 0.3mm; }
+.t-12x3 .normal-row.pequeno .price-normal-label { font-size: 4.2pt; color: #444; }
+.t-12x3 .normal-row.pequeno .price-normal-value { font-size: 8pt; color: #444; }
+.t-12x3 .price-normal-label { font-size: 5pt; color: #000; }
+.t-12x3 .price-normal-value { font-size: 12pt; color: #000; line-height: 1.15; }
+.t-12x3 .template-code-badge { position: absolute; bottom: -2mm; right: 0; font-size: 4pt; }
+
+/* --------------------------------------------------------
+   9. 6x4 (Etiqueta Individual - 60 x 40 mm)
+   -------------------------------------------------------- */
+.cartel-sheet.t-6x4,
+.grid-cell-label.t-6x4 {
+  width: 60mm;
+  height: 40mm;
+  padding: 2.2mm 3.5mm 1.8mm 3.5mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.t-6x4 .header-6x4 { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.t-6x4 .brand-name { font-size: 10.5pt; }
+.t-6x4 .category-name { font-size: 6.8pt; font-weight: 700; color: #111; margin-top: 0.5mm; }
+.t-6x4 .model-sku { font-size: 4.8pt; font-weight: 600; color: #333; margin-top: 0.4mm; }
+
+.t-6x4 .pricing-center-6x4 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  width: 100%;
+}
+
+.t-6x4 .cmr-badge-combo { gap: 1.5mm; margin-bottom: 0.8mm; }
+.t-6x4 .oportunidad-img { height: 7mm; }
+.t-6x4 .cmr-card-img { height: 7mm; border-radius: 1px; }
+.t-6x4 .price-cmr-value { font-size: 19pt; line-height: 1.15; }
+.t-6x4 .price-normal-col-6x4 { display: flex; flex-direction: column; align-items: center; margin-top: 1mm; }
+.t-6x4 .price-normal-label-6x4 { font-size: 5.2pt; font-weight: 800; color: #000; line-height: 1.2; }
+.t-6x4 .price-normal-value-6x4 { font-size: 13.5pt; font-weight: 400; color: #000; line-height: 1.15; }
+
+.t-6x4 .secondary-prices-6x4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3.5mm;
+  margin-top: 1mm;
+}
+.t-6x4 .sec-price-item { display: flex; flex-direction: column; align-items: center; }
+.t-6x4 .sec-price-item .sec-label { font-size: 4.2pt; font-weight: 800; color: #000; line-height: 1.2; }
+.t-6x4 .sec-price-item .sec-value { font-size: 9pt; font-weight: 400; color: #000; line-height: 1.15; }
+
+/* Tri-Price 6x4 layout */
+.t-6x4 .cmr-inline-row-6x4 { display: flex; align-items: center; justify-content: center; gap: 2mm; width: 100%; }
+.t-6x4 .cmr-inline-row-6x4 .cmr-badge-combo { margin-bottom: 0; gap: 1.2mm; }
+.t-6x4 .cmr-inline-row-6x4 .oportunidad-img { height: 7.2mm; }
+.t-6x4 .cmr-inline-row-6x4 .cmr-card-img { height: 7.2mm; }
+.t-6x4 .cmr-inline-row-6x4 .price-cmr-value { font-size: 18pt; line-height: 1.15; }
+
+.t-6x4 .otro-medio-block-6x4 { display: flex; flex-direction: column; align-items: center; margin-top: 1mm; }
+.t-6x4 .otro-medio-label-6x4 { font-size: 5.2pt; color: #000; line-height: 1.2; }
+.t-6x4 .otro-medio-value-6x4 { font-size: 14pt; color: #000; line-height: 1.15; }
+
+.t-6x4 .footer-normal-col-6x4 { display: flex; flex-direction: column; align-items: flex-end; text-align: right; line-height: 1.2; }
+.t-6x4 .footer-normal-label-6x4 { font-size: 4.2pt; color: #000; line-height: 1.2; }
+.t-6x4 .footer-normal-val-6x4 { font-size: 9.5pt; color: #000; line-height: 1.15; }
+
+.t-6x4 .footer-6x4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  font-size: 3.8pt;
+  color: #444;
+}
+.t-6x4 .vigencia-text { font-size: 3.8pt; }
+.t-6x4 .template-code-badge { font-size: 4.5pt; }
+
+/* --------------------------------------------------------
+   10. Hoja Carta con 18 etiquetas de 6x4 (Grilla 3x6)
+   -------------------------------------------------------- */
+.cartel-sheet.t-6x4-sheet {
+  width: 216mm;
+  height: 279mm;
+  padding: 10mm 12mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.sheet-6x4-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 60mm);
+  grid-template-rows: repeat(6, 40mm);
+  gap: 2mm 3mm;
+  justify-content: center;
+  align-content: center;
+}
+
+.grid-cell-label {
+  border: 0.6px dashed #94a3b8;
+  width: 60mm;
+  height: 40mm;
+}

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Cartelería Retail | Falabella</title>
+  <meta name="description" content="Generador profesional de cartelería retail single page para tiendas Falabella con cálculo automático de cuotas CMR, códigos QR y exportación a PDF en alta resolución.">
+  <meta name="author" content="Rouchant">
+  <!-- Favicon Oficial Falabella -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="alternate icon" type="image/png" href="assets/favicon.png">
+  <!-- Estilos Locales Modulares (100% Offline) -->
+  <link rel="stylesheet" href="css/fonts.css?v=20261011_9">
+  <link rel="stylesheet" href="css/app.css?v=20261011_9">
+  <link rel="stylesheet" href="css/cartel-base.css?v=20261011_9">
+  <link rel="stylesheet" href="css/cartel-templates.css?v=20261012_redlabel">
+</head>
+<body>
+
+  <div class="app-layout">
+    <!-- PANEL LATERAL: Configuración y Datos -->
+    <aside class="editor-sidebar" id="editorSidebar">
+      <!-- Encabezado de la barra lateral -->
+      <header class="sidebar-header">
+        <div class="brand-badge">
+          <div class="brand-logo-icon">F</div>
+          <div class="brand-text">
+            <h1>Generador de Cartelería</h1>
+            <p>Formato Retail & CMR</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Contenido del formulario de edición -->
+      <div class="sidebar-content">
+        
+        <!-- Presets rápidos -->
+        <section class="form-section" id="sectionPresets">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Ejemplos Rápidos</span>
+          </div>
+          <div class="preset-bar">
+            <button type="button" class="preset-chip" data-preset="asus-full" id="presetAsus">Oportunidad Única</button>
+            <button type="button" class="preset-chip" data-preset="sin-cmr" id="presetSinCmr">Todo Medio de Pago</button>
+            <button type="button" class="preset-chip" data-preset="solo-normal" id="presetSoloNormal">Solo Precio Normal</button>
+            <button type="button" class="preset-chip" data-preset="clean" id="presetClean">Limpiar</button>
+          </div>
+        </section>
+
+        <!-- Información del Producto -->
+        <section class="form-section" id="sectionProducto">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            <span>Datos del Producto</span>
+          </div>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="inputMarca">Marca</label>
+              <input type="text" id="inputMarca" placeholder="Marca..." value="MARCA">
+            </div>
+
+            <div class="field-group autocomplete-group" id="groupCategoria">
+              <label for="inputCategoria">Categoría</label>
+              <div class="input-autocomplete-wrapper">
+                <input type="text" id="inputCategoria" placeholder="Buscar categoría..." value="Categoria" autocomplete="off" spellcheck="false">
+                <button type="button" class="btn-clear-categoria hidden" id="btnClearCategoria" title="Limpiar categoría" aria-label="Limpiar">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+                <div class="autocomplete-dropdown hidden" id="categoriaDropdown" role="listbox"></div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="inputModelo">Modelo</label>
+              <input type="text" id="inputModelo" placeholder="Modelo..." value="Modelo">
+            </div>
+
+            <div class="field-group">
+              <label for="inputSku">SKU</label>
+              <input type="text" id="inputSku" placeholder="00000000..." value="00000000">
+            </div>
+          </div>
+        </section>
+
+        <!-- Precios -->
+        <section class="form-section" id="sectionPrecios">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            <span>Configuración de Precios</span>
+          </div>
+          <div class="field-grid">
+            <!-- Precio CMR -->
+            <div class="field-group full-width">
+              <label for="inputPrecioCmr">
+                <span>Precio CMR (Oportunidad Única)</span>
+                <span class="label-hint">Dejar vacío si no aplica</span>
+              </label>
+              <input type="text" id="inputPrecioCmr" placeholder="$000.000" value="$999.990">
+            </div>
+
+            <!-- Precio Oferta -->
+            <div class="field-group full-width">
+              <label for="inputPrecioOferta">
+                <span>Precio Oferta (Otro Medio de Pago)</span>
+                <span class="label-hint">Dejar vacío si no aplica</span>
+              </label>
+              <input type="text" id="inputPrecioOferta" placeholder="$000.000" value="$999.990">
+            </div>
+
+            <!-- Precio Normal -->
+            <div class="field-group full-width">
+              <label for="inputPrecioNormal">
+                <span>Precio Normal (Referencia)</span>
+              </label>
+              <input type="text" id="inputPrecioNormal" placeholder="$000.000" value="$999.990">
+            </div>
+          </div>
+        </section>
+
+        <!-- Financiamiento CMR y CAE -->
+        <section class="form-section" id="sectionFinanciamiento">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+            <span>Financiamiento CMR (12 Cuotas)</span>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="inputCae">CAE Anual (%)</label>
+              <input type="number" id="inputCae" step="0.01" value="39.93">
+            </div>
+
+            <div class="field-group" style="justify-content: flex-end;">
+              <label class="checkbox-label" style="cursor: pointer; display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding-bottom: 8px;">
+                <input type="checkbox" id="checkAutoCalc" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer; accent-color: var(--primary);">
+                <span>Cálculo automático</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Resumen de cálculo automático -->
+          <div class="auto-calc-box" id="calcSummaryBox">
+            <div class="auto-calc-row">
+              <span>12 Cuotas calculadas:</span>
+              <strong id="calcCuotaDisplay">$64.826</strong>
+            </div>
+            <div class="auto-calc-row">
+              <span>Costo Total Crédito (CTC):</span>
+              <strong id="calcCtcDisplay">$782.981</strong>
+            </div>
+          </div>
+
+          <!-- Campos manuales (si se desmarca el automático) -->
+          <div class="field-grid" id="manualCalcFields" style="display: none; margin-top: 10px;">
+            <div class="field-group">
+              <label for="inputCuotaManual">Monto Cuota</label>
+              <input type="text" id="inputCuotaManual" placeholder="$000.000">
+            </div>
+
+            <div class="field-group">
+              <label for="inputCtcManual">CTC Total</label>
+              <input type="text" id="inputCtcManual" placeholder="$000.000">
+            </div>
+          </div>
+        </section>
+
+        <!-- Vigencia de Campaña -->
+        <section class="form-section" id="sectionVigencia">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Vigencia de Precios</span>
+          </div>
+          <div class="field-grid">
+            <div class="field-group">
+              <label for="inputVigenciaDesde">Desde</label>
+              <input type="date" id="inputVigenciaDesde" value="2026-10-05">
+            </div>
+
+            <div class="field-group">
+              <label for="inputVigenciaHasta">Hasta</label>
+              <input type="date" id="inputVigenciaHasta" value="2026-10-12">
+            </div>
+          </div>
+        </section>
+
+        <!-- Selector de Plantilla / Tamaño (Último módulo) -->
+        <section class="form-section" id="sectionFormatos">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+            <span>Tamaño y Formato</span>
+          </div>
+          <div class="template-selector-grid">
+            <!-- 1. Carta: P_118 -->
+            <div class="template-card active" data-template="p118" data-name="P_118 (Carta)">
+              <div class="template-thumb tall">Carta</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>Carta (P_118)</h4>
+                  <span class="template-tag">Principal</span>
+                </div>
+                <p>21.6 x 27.9 cm</p>
+              </div>
+            </div>
+
+            <!-- 2. 151: 13x19 Góndola -->
+            <div class="template-card" data-template="p132" data-name="151 (13x19)">
+              <div class="template-thumb tall">13x19</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>151 (13x19)</h4>
+                  <span class="template-tag">Góndola</span>
+                </div>
+                <p>13 x 19 cm Vertical</p>
+              </div>
+            </div>
+
+            <!-- 3. 131: 9x13 Pedestal Chico -->
+            <div class="template-card" data-template="t-9x13" data-name="131 (9x13)">
+              <div class="template-thumb tall">9x13</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>131 (9x13)</h4>
+                  <span class="template-tag">Pedestal</span>
+                </div>
+                <p>9 x 13 cm</p>
+              </div>
+            </div>
+
+            <!-- 4. 130: 9x7 Ficha Mesón -->
+            <div class="template-card" data-template="t-9x7" data-name="130 (9x7)">
+              <div class="template-thumb">9x7</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>130 (9x7)</h4>
+                  <span class="template-tag">Ficha</span>
+                </div>
+                <p>9 x 7 cm Ficha</p>
+              </div>
+            </div>
+
+            <!-- 5. 308: 6x4 Individual -->
+            <div class="template-card" data-template="t-6x4" data-name="308 (6x4)">
+              <div class="template-thumb">6x4</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>308 (6x4)</h4>
+                  <span class="template-tag">Etiqueta</span>
+                </div>
+                <p>6 x 4 cm Individual</p>
+              </div>
+            </div>
+
+            <!-- 6. 263: 12x3 Fleje Estantería -->
+            <div class="template-card" data-template="t-12x3" data-name="263 (12x3 Fleje)">
+              <div class="template-thumb wide">12x3</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>263 (12x3)</h4>
+                  <span class="template-tag">Fleje</span>
+                </div>
+                <p>12 x 3 cm Estantería</p>
+              </div>
+            </div>
+
+            <!-- 7. 6x4: Hoja Carta Rejilla Completa (18x) -->
+            <div class="template-card" data-template="t-6x4-sheet" data-name="6x4 Rejilla (18x)">
+              <div class="template-thumb tall thumb-sheet">18x</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>6x4 Rejilla</h4>
+                  <span class="template-tag tag-sheet">18x Hoja</span>
+                </div>
+                <p>Hoja Carta Completa</p>
+              </div>
+            </div>
+
+            <!-- 8. 153: 15x21 Pedestal -->
+            <div class="template-card" data-template="t-15x21" data-name="153 (15x21)">
+              <div class="template-thumb tall">15x21</div>
+              <div class="template-info">
+                <div class="template-header-row">
+                  <h4>153 (15x21)</h4>
+                  <span class="template-tag">Pedestal</span>
+                </div>
+                <p>15 x 21 cm</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Barra inferior fija con botones principales -->
+      <footer class="sidebar-footer">
+        <button type="button" class="btn btn-secondary" id="btnPrint" title="Abre el diálogo nativo de impresión para imprimir directo o guardar como PDF">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          <span>Imprimir</span>
+        </button>
+
+        <button type="button" class="btn btn-primary" id="btnDownloadPdf" title="Descarga directa del PDF en dimensiones reales 300 DPI">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Descargar PDF</span>
+        </button>
+      </footer>
+    </aside>
+
+    <!-- ÁREA DE VISUALIZACIÓN EN VIVO (WYSIWYG) -->
+    <main class="preview-stage" id="previewStage">
+      <!-- Barra superior de control de visualización -->
+      <div class="preview-toolbar">
+        <div class="toolbar-left">
+          <div class="status-indicator">
+            <span class="status-dot"></span>
+            <span>Vista Previa en Vivo</span>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <div class="zoom-controls">
+            <button class="zoom-btn" id="btnZoomOut" title="Reducir zoom">−</button>
+            <span class="zoom-level" id="zoomLevelText">75%</span>
+            <button class="zoom-btn" id="btnZoomIn" title="Aumentar zoom">+</button>
+            <button class="zoom-btn" id="btnZoomReset" title="Restablecer zoom" style="font-size: 11px; padding: 0 4px;">100%</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lienzo donde se renderiza el cartel en tiempo real -->
+      <div class="preview-canvas-container" id="canvasContainer">
+        <div class="preview-wrapper" id="previewWrapper">
+          <div id="cartelContainer"></div>
+        </div>
+      </div>
+
+      <!-- Marca de agua de la interfaz -->
+      <div class="app-watermark" id="appWatermark" title="Desarrollado por Rouchant">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"></polyline>
+          <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+        <span>Developed by Rouchant</span>
+      </div>
+    </main>
+  </div>
+
+  <!-- Librerías de soporte -->
+  <script src="lib/qrcode.min.js"></script>
+  <script src="lib/html2canvas.min.js"></script>
+  <script src="lib/jspdf.umd.min.js"></script>
+
+  <!-- Módulos de la aplicación por responsabilidad -->
+  <script src="js/assets.js?v=20261012_martes"></script>
+  <script src="js/utils.js?v=20261012_martes"></script>
+  <script src="js/state.js?v=20261012_martes"></script>
+  <script src="js/calculator.js?v=20261012_martes"></script>
+  <script src="js/templates.js?v=20261012_martes"></script>
+  <script src="js/qr.js?v=20261012_martes"></script>
+  <script src="js/export.js?v=20261012_martes"></script>
+  <script src="js/categorias.js?v=20261013_autocomplete"></script>
+  <script src="js/app.js?v=20261012_martes"></script>
+</body>
+</html>

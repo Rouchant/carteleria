@@ -1,0 +1,21 @@
+{
+  "name": "generador-carteleria-retail",
+  "version": "1.0.0",
+  "description": "Generador Single Page de Cartelería Retail con cálculo de cuotas CMR, códigos QR y exportación a PDF en alta resolución.",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node tests/smoketest.js && node tests/tests_quality.js",
+    "test:quality": "node tests/tests_quality.js",
+    "test:smoke": "node tests/smoketest.js"
+  },
+  "keywords": [
+    "carteleria",
+    "retail",
+    "falabella",
+    "cmr",
+    "pdf"
+  ],
+  "author": "Rouchant",
+  "license": "MIT"
+}
