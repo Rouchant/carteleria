@@ -8,9 +8,19 @@ async function exportToPDF() {
   if (!sheet) return;
 
   const btn = dom.btnDownloadPdf;
-  const originalText = btn.innerHTML;
-  btn.innerHTML = `<svg class="spinner" viewBox="0 0 50 50" style="width:16px;height:16px;animation:spin 1s linear infinite;"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="31.4 31.4"></circle></svg> Generando PDF...`;
-  btn.disabled = true;
+  const btnMobile = dom.btnDownloadPdfMobile;
+  const originalText = btn ? btn.innerHTML : '';
+  const originalTextMobile = btnMobile ? btnMobile.innerHTML : '';
+
+  const spinnerHtml = `<svg class="spinner" viewBox="0 0 50 50" style="width:16px;height:16px;animation:spin 1s linear infinite;"><circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5" stroke-dasharray="31.4 31.4"></circle></svg> Generando PDF...`;
+  if (btn) {
+    btn.innerHTML = spinnerHtml;
+    btn.disabled = true;
+  }
+  if (btnMobile) {
+    btnMobile.innerHTML = spinnerHtml;
+    btnMobile.disabled = true;
+  }
 
   let prevTransform = '';
   let prevTransition = '';
@@ -20,6 +30,10 @@ async function exportToPDF() {
     if (btn) {
       btn.innerHTML = originalText;
       btn.disabled = false;
+    }
+    if (btnMobile) {
+      btnMobile.innerHTML = originalTextMobile;
+      btnMobile.disabled = false;
     }
   }, 8000);
 
@@ -142,7 +156,7 @@ async function exportToPDF() {
         }
 
         // Sincronizar fuentes locales cargadas en el documento con el iframe clonado
-        if (clonedDoc.fonts && document.fonts) {
+        if (clonedDoc.fonts && document.fonts && typeof document.fonts.forEach === 'function') {
           document.fonts.forEach(font => {
             try {
               clonedDoc.fonts.add(font);
@@ -181,9 +195,44 @@ async function exportToPDF() {
     doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
     const filename = `Cartel_${state.template.toUpperCase()}_${(state.marca || 'PRODUCTO').replace(/\s+/g, '_')}_${state.sku || 'SKU'}.pdf`;
-    doc.save(filename);
 
-    showToast(`PDF "${filename}" descargado con éxito`);
+    // Detección de dispositivos iOS (iPhone, iPad, iPod)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    if (isIOS) {
+      const pdfBlob = doc.output('blob');
+      const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+      // 1. En iPhone/iPad con soporte Web Share API (iOS 15+), abrir Share Sheet nativo ("Guardar en Archivos")
+      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+        try {
+          await navigator.share({
+            files: [pdfFile],
+            title: filename
+          });
+          showToast(`PDF listo en iPhone`);
+          return;
+        } catch (shareErr) {
+          if (shareErr.name === 'AbortError') {
+            return;
+          }
+          console.warn('Fallo navigator.share en iOS, usando visor alternativo:', shareErr);
+        }
+      }
+
+      // 2. Fallback iOS: abrir visor nativo de PDF en pestaña nueva o redirección directa
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      const newWin = window.open(blobUrl, '_blank');
+      if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+        window.location.href = blobUrl;
+      }
+      showToast(`PDF abierto. Puedes guardarlo desde el menú Compartir.`);
+    } else {
+      // Descarga directa tradicional en escritorio y Android
+      doc.save(filename);
+      showToast(`PDF "${filename}" descargado con éxito`);
+    }
   } catch (error) {
     console.error('Error al generar PDF:', error);
     showToast('Error al generar PDF. Utiliza la opción de "Imprimir" para guardarlo.', 'error');
@@ -194,6 +243,10 @@ async function exportToPDF() {
     if (btn) {
       btn.innerHTML = originalText;
       btn.disabled = false;
+    }
+    if (btnMobile) {
+      btnMobile.innerHTML = originalTextMobile;
+      btnMobile.disabled = false;
     }
 
     // Restaurar el zoom original de la vista previa

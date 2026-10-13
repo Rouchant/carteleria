@@ -147,6 +147,9 @@ body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .field-grid.grid-3 {
@@ -157,6 +160,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .field-group.full-width {
@@ -189,6 +195,10 @@ body {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .input-prefix {
@@ -204,7 +214,10 @@ input[type="text"],
 input[type="number"],
 input[type="date"],
 select {
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 9px 12px;
   font-size: 13px;
   font-family: inherit;
@@ -214,6 +227,21 @@ select {
   border-radius: var(--radius-sm);
   outline: none;
   transition: var(--transition);
+}
+
+/* Soporte específico para selectores de fecha en iOS Safari */
+input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+}
+
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+  line-height: normal;
+  padding: 0;
+  margin: 0;
 }
 
 input::placeholder {
@@ -799,6 +827,10 @@ input:focus, select:focus {
   input[type="number"],
   input[type="date"],
   select {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     font-size: 16px; /* Previene auto-zoom molesto en Safari iOS */
     padding: 10px 12px;
     min-height: 42px;
@@ -812,6 +844,16 @@ input:focus, select:focus {
   .field-grid {
     grid-template-columns: 1fr;
     gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .field-group {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .preset-bar {
