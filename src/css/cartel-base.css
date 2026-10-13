@@ -50,6 +50,10 @@
 .cartel-sheet img.legal-cmf-img {
   width: 100%;
   height: auto;
+  aspect-ratio: 1303 / 114;
+  object-fit: fill;
+  object-position: top left;
+  display: block;
 }
 
 /* Código QR: Aspecto cuadrado 1:1 estricto */
@@ -574,19 +578,46 @@
   body.is-mobile-device .p118 .bottom-footer {
     padding-top: 1mm !important;
     align-items: flex-end !important;
+    position: relative !important;
   }
 
+  .is-mobile-device .legal-box,
+  body.is-mobile-device .legal-box,
   .is-mobile-device .p118 .legal-box,
   body.is-mobile-device .p118 .legal-box {
     width: 78% !important;
     font-size: 4.8pt !important;
-    line-height: 1.2 !important;
+    line-height: 1.15 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 0.5mm !important;
+    height: auto !important;
   }
 
+  .is-mobile-device .vigencia-text,
+  body.is-mobile-device .vigencia-text,
   .is-mobile-device .p118 .vigencia-text,
   body.is-mobile-device .p118 .vigencia-text {
     font-size: 6.5pt !important;
-    margin-bottom: 1mm !important;
+    margin-bottom: 0 !important;
+    line-height: 1.15 !important;
+  }
+
+  .is-mobile-device .legal-cmf-img,
+  body.is-mobile-device .legal-cmf-img,
+  .is-mobile-device .p118 .legal-cmf-img,
+  body.is-mobile-device .p118 .legal-cmf-img {
+    width: 100% !important;
+    max-width: 145mm !important;
+    height: auto !important;
+    aspect-ratio: 1303 / 114 !important;
+    object-fit: fill !important;
+    object-position: top left !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .is-mobile-device .p118 .fpuntos-badge,
@@ -597,10 +628,12 @@
 
   .is-mobile-device .p118 .template-code-badge,
   body.is-mobile-device .p118 .template-code-badge {
-    position: static !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     font-size: 6pt !important;
     display: block !important;
-    margin-top: 0.5mm !important;
   }
 
   .is-mobile-device .cartel-sheet.t-6x4-sheet,
