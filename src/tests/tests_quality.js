@@ -290,6 +290,16 @@ test('renderVerticalTemplate (P_132 - 13x19) incluye logo Fpuntos e info CMF', (
   expect(sheet.innerHTML).toContain('infocmf.png');
 });
 
+test('render9x13 incluye imagen infocmf en la parte inferior', () => {
+  const sheet = new MockElement('div');
+  ctx.render9x13(sheet, baseCtxMock);
+  expect(sheet.innerHTML).toContain('9x13');
+  expect(sheet.innerHTML).toContain('bottom-footer');
+  expect(sheet.innerHTML).toContain('legal-cmf-img');
+  expect(sheet.innerHTML).toContain('infocmf.png');
+  expect(sheet.innerHTML).toContain('vigencia-text');
+});
+
 test('render9x7 en modo Tri-precio genera estructura idéntica a muestra oficial (P_121)', () => {
   const sheet = new MockElement('div');
   ctx.render9x7(sheet, baseCtxMock);

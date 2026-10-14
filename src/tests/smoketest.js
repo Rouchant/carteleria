@@ -324,6 +324,7 @@ function testTemplatesRender() {
   const sheet9x13 = new MockElement('div');
   context.render9x13(sheet9x13, ctxMock);
   assert(sheet9x13.innerHTML.includes('9x13'), 'Plantilla 9x13 renderiza correctamente');
+  assert(sheet9x13.innerHTML.includes('infocmf.png'), 'Plantilla 9x13 incluye infocmf en la parte inferior');
 
   // 5. 9x7 (Ficha Mesón P_130 / P_121)
   const sheet9x7 = new MockElement('div');

@@ -403,8 +403,13 @@ function render9x13(sheet, ctx) {
       ${pricingHtml}
     </div>
 
-    <div class="vigencia-text">${ctx.vigenciaStr}</div>
-    <div class="template-code-badge">9x13</div>
+    <div class="bottom-footer">
+      <div class="legal-box">
+        <div class="vigencia-text">${ctx.vigenciaStr}</div>
+        <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img">
+      </div>
+      <div class="template-code-badge">9x13</div>
+    </div>
   `;
 }
 
