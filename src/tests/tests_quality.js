@@ -128,6 +128,7 @@ const calcCode = fs.readFileSync(path.join(SRC_DIR, 'js/calculator.js'), 'utf-8'
 const tplCode = fs.readFileSync(path.join(SRC_DIR, 'js/templates.js'), 'utf-8');
 const stateCode = fs.readFileSync(path.join(SRC_DIR, 'js/state.js'), 'utf-8');
 const exportCode = fs.readFileSync(path.join(SRC_DIR, 'js/export.js'), 'utf-8');
+const batchCode = fs.readFileSync(path.join(SRC_DIR, 'js/batch.js'), 'utf-8');
 
 const ctx = {
   console,
@@ -135,6 +136,7 @@ const ctx = {
   Date,
   String,
   RegExp,
+  window: {},
   document: {
     createElement: (tag) => new MockElement(tag)
   },
@@ -145,6 +147,7 @@ vm.runInContext(utilsCode, ctx);
 vm.runInContext(calcCode, ctx);
 vm.runInContext(stateCode, ctx);
 vm.runInContext(tplCode, ctx);
+vm.runInContext(batchCode, ctx);
 
 console.log(`\n${C.bold}${C.cyan}================================================================${C.reset}`);
 console.log(`${C.bold}${C.cyan}  SUITE DE PRUEBAS UNITARIAS & AUDITORÍA DE CALIDAD RETAIL      ${C.reset}`);
@@ -240,10 +243,14 @@ test('calcularFinanciamiento genera cuota y CTC oficiales para monto retail', ()
   expect(fin2.ctc).toBe(1835136);
 });
 
-test('calcularFinanciamiento responde cuota 0 y ctc 0 ante capital nulo o menor o igual a cero', () => {
+test('calcularFinanciamiento responde cuota 0 y ctc 0 ante capital nulo o menor o igual a $60.000', () => {
   expect(ctx.calcularFinanciamiento(0, 39.93).cuota).toBe(0);
   expect(ctx.calcularFinanciamiento(null, 39.93).cuota).toBe(0);
   expect(ctx.calcularFinanciamiento(-500, 39.93).cuota).toBe(0);
+  expect(ctx.calcularFinanciamiento(15990, 39.93).cuota).toBe(0);
+  expect(ctx.calcularFinanciamiento(59990, 39.93).cuota).toBe(0);
+  expect(ctx.calcularFinanciamiento(60000, 39.93).cuota).toBe(0);
+  expect(ctx.calcularFinanciamiento(60001, 39.93).cuota).toBeGreaterThan(0);
 });
 
 test('calcularCTC devuelve Costo Total del Crédito mayor al capital financiado', () => {
@@ -341,6 +348,49 @@ test('render6x4 individual y hoja carta 18x generan celdas completas', () => {
   ctx.render6x4Sheet(sheetGrid, baseCtxMock);
   expect(sheetGrid.innerHTML).toContain('sheet-6x4-grid');
   expect(sheetGrid.innerHTML).toContain('grid-cell-label');
+});
+
+test('Productos < $60.000 no muestran bloque de cuotas en ningún modo comercial', () => {
+  const sinCuotasCtx = {
+    hasCmr: false,
+    hasOferta: true,
+    hasNormal: true,
+    vigenciaStr: 'VIGENCIA: 20/10/2026 A 26/10/2026',
+    financiamiento: { cuota: 0, ctc: 0 }
+  };
+  const sheetP118 = new MockElement('div');
+  ctx.renderVerticalTemplate(sheetP118, 'p118', sinCuotasCtx);
+  expect(sheetP118.innerHTML).notToContain('cuotas-cmr-row');
+  expect(sheetP118.innerHTML).notToContain('CUOTAS DE $0');
+  expect(sheetP118.innerHTML).notToContain('CTC: $0');
+
+  const sheet15x21 = new MockElement('div');
+  ctx.render15x21(sheet15x21, sinCuotasCtx);
+  expect(sheet15x21.innerHTML).notToContain('cuotas-cmr-row');
+  expect(sheet15x21.innerHTML).notToContain('CUOTAS DE $0');
+
+  const sheet9x7 = new MockElement('div');
+  ctx.render9x7(sheet9x7, sinCuotasCtx);
+  expect(sheet9x7.innerHTML).notToContain('cuotas-cmr-row');
+  expect(sheet9x7.innerHTML).notToContain('CUOTAS DE $0');
+});
+
+test('extractBatchSkus procesa SKUs separados por espacios, comas y saltos de línea', () => {
+  // Separados por espacios (requerimiento directo del usuario)
+  const conEspacios = ctx.extractBatchSkus('80758852 16347951 17201800');
+  expect(conEspacios).toEqual(['80758852', '16347951', '17201800']);
+
+  // Separados por comas y punto y coma
+  const conComas = ctx.extractBatchSkus('80758852, 16347951; 17201800');
+  expect(conComas).toEqual(['80758852', '16347951', '17201800']);
+
+  // Separados por saltos de línea
+  const conSaltos = ctx.extractBatchSkus("80758852\n16347951\r\n17201800");
+  expect(conSaltos).toEqual(['80758852', '16347951', '17201800']);
+
+  // Formato mixto con URLs y preservación de duplicados para impresión múltiple
+  const mixto = ctx.extractBatchSkus('https://www.falabella.com/falabella-cl/product/80758852/Notebook 16347951\nSKU: 17201800 80758852');
+  expect(mixto).toEqual(['80758852', '16347951', '17201800', '80758852']);
 });
 
 // -------------------------------------------------------------

@@ -28,8 +28,8 @@ const ICONS = {
   // Badge oficial Oportunidad Única + Tarjeta CMR provistos por el usuario
   cmrComboBadge: `
     <div class="cmr-badge-combo">
-      <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img">
-      <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img">
+      <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img" width="447" height="447">
+      <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img" width="409" height="644">
     </div>
   `
 };
@@ -72,13 +72,15 @@ function renderVerticalTemplate(sheet, tplCode, ctx) {
   if (!ctx.hasCmr && !ctx.hasOferta && ctx.hasNormal) {
     centerPricing.innerHTML = `
       <div class="solo-normal-big-price">${formatCLP(state.precioNormal)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
           <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
     `;
   }
   // Caso 2: SIN CMR / OFERTA + NORMAL (P_141 - TODO MEDIO DE PAGO)
@@ -86,13 +88,15 @@ function renderVerticalTemplate(sheet, tplCode, ctx) {
     centerPricing.innerHTML = `
       <div class="todo-medio-label">TODO MEDIO DE PAGO</div>
       <div class="price-cmr-value">${formatCLP(state.precioOferta)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
           <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
 
       ${ctx.hasNormal ? `
         <div class="price-normal-block">
@@ -108,8 +112,10 @@ function renderVerticalTemplate(sheet, tplCode, ctx) {
       ${ICONS.cmrComboBadge}
       <div class="price-cmr-block">
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+        ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
         <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
+        ` : ''}
       </div>
 
       ${ctx.hasOferta ? `
@@ -135,7 +141,7 @@ function renderVerticalTemplate(sheet, tplCode, ctx) {
   footer.innerHTML = `
     <div class="legal-box">
       <div class="vigencia-text">${ctx.vigenciaStr}</div>
-      <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img">
+      <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img" width="1303" height="114">
     </div>
     <div class="fpuntos-badge">
       ${ICONS.fpuntos}
@@ -230,8 +236,10 @@ function renderFichaP121(sheet, ctx) {
       ${ctx.hasCmr ? `
         ${ICONS.cmrComboBadge}
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+        ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
         <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
+        ` : ''}
       ` : ''}
 
       ${ctx.hasOferta ? `
@@ -259,25 +267,29 @@ function render15x21(sheet, ctx) {
   if (!ctx.hasCmr && !ctx.hasOferta && ctx.hasNormal) {
     pricingHtml = `
       <div class="solo-normal-big-price" style="font-size: 50pt;">${formatCLP(state.precioNormal)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" style="height: 10mm;">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644" style="height: 10mm;">
         <div class="cuotas-texts">
           <div class="cuotas-line-1" style="font-size: 13pt;">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2" style="font-size: 10pt;">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
     `;
   } else if (!ctx.hasCmr && ctx.hasOferta) {
     pricingHtml = `
       <div class="todo-medio-label" style="font-size: 15pt;">TODO MEDIO DE PAGO</div>
       <div class="price-cmr-value" style="font-size: 44pt;">${formatCLP(state.precioOferta)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" style="height: 10mm;">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644" style="height: 10mm;">
         <div class="cuotas-texts">
           <div class="cuotas-line-1" style="font-size: 13pt;">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2" style="font-size: 10pt;">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
       ${ctx.hasNormal ? `
         <div class="price-normal-block">
           <div class="price-normal-label" style="font-size: 10pt;">PRECIO NORMAL</div>
@@ -290,8 +302,10 @@ function render15x21(sheet, ctx) {
       ${ICONS.cmrComboBadge}
       <div class="price-cmr-block">
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+        ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
         <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
+        ` : ''}
       </div>
       ${ctx.hasOferta ? `
         <div class="price-oferta-block">
@@ -329,7 +343,7 @@ function render15x21(sheet, ctx) {
     <div class="bottom-footer">
       <div class="legal-box">
         <div class="vigencia-text">${ctx.vigenciaStr}</div>
-        <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img">
+        <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img" width="1303" height="114">
       </div>
       <div class="fpuntos-badge">
         ${ICONS.fpuntos}
@@ -345,25 +359,29 @@ function render9x13(sheet, ctx) {
   if (!ctx.hasCmr && !ctx.hasOferta && ctx.hasNormal) {
     pricingHtml = `
       <div class="solo-normal-big-price" style="font-size: 34pt;">${formatCLP(state.precioNormal)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" style="height: 7mm;">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644" style="height: 7mm;">
         <div class="cuotas-texts">
           <div class="cuotas-line-1" style="font-size: 8.5pt;">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2" style="font-size: 6.5pt;">CAE: ${state.cae.toFixed(1)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
     `;
   } else if (!ctx.hasCmr && ctx.hasOferta) {
     pricingHtml = `
       <div class="todo-medio-label" style="font-size: 9pt;">TODO MEDIO DE PAGO</div>
       <div class="price-cmr-value" style="font-size: 28pt;">${formatCLP(state.precioOferta)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" style="height: 7mm;">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644" style="height: 7mm;">
         <div class="cuotas-texts">
           <div class="cuotas-line-1" style="font-size: 8.5pt;">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2" style="font-size: 6.5pt;">CAE: ${state.cae.toFixed(1)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
       ${ctx.hasNormal ? `
         <div class="price-normal-block">
           <div class="price-normal-label" style="font-size: 7pt;">PRECIO NORMAL</div>
@@ -375,8 +393,10 @@ function render9x13(sheet, ctx) {
     pricingHtml = `
       ${ICONS.cmrComboBadge}
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
       <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
+      ` : ''}
       ${ctx.hasOferta ? `
         <div class="price-oferta-block">
           <div class="price-oferta-value">${formatCLP(state.precioOferta)}</div>
@@ -406,7 +426,7 @@ function render9x13(sheet, ctx) {
     <div class="bottom-footer">
       <div class="legal-box">
         <div class="vigencia-text">${ctx.vigenciaStr}</div>
-        <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img">
+        <img src="${ASSET_PATHS.infocmf}" alt="Información CMF" class="legal-cmf-img" width="1303" height="114">
       </div>
       <div class="template-code-badge">9x13</div>
     </div>
@@ -437,13 +457,15 @@ function render9x7(sheet, ctx) {
     pricingHtml = `
       <div class="price-oferta-header" style="color: #000;">PRECIO NORMAL</div>
       <div class="price-oferta-value" style="color: #000;">${formatCLP(state.precioNormal)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
           <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
     `;
   }
   // Caso 2: Precio Oferta (sin CMR) - Caso oficial P_130
@@ -451,13 +473,15 @@ function render9x7(sheet, ctx) {
     pricingHtml = `
       <div class="price-oferta-header">PRECIO OFERTA</div>
       <div class="price-oferta-value">${formatCLP(state.precioOferta)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-row">
-        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card">
+        <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
           <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
+      ` : ''}
       ${ctx.hasNormal ? `
         <div class="price-normal-row">
           PRECIO NORMAL <span class="val">${formatCLP(state.precioNormal)}</span>
@@ -475,14 +499,16 @@ function render9x7(sheet, ctx) {
 
     pricingHtml = `
       <div class="cmr-badge-combo">
-        <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img">
-        <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img">
+        <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img" width="447" height="447">
+        <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img" width="409" height="644">
       </div>
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-block">
         <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
       </div>
+      ` : ''}
 
       <div class="price-oferta-block">
         <div class="price-oferta-value">${formatCLP(state.precioOferta)}</div>
@@ -506,14 +532,16 @@ function render9x7(sheet, ctx) {
 
     pricingHtml = `
       <div class="cmr-badge-combo">
-        <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img">
-        <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img">
+        <img src="${ASSET_PATHS.oportunidadunica}" alt="Oportunidad Única" class="oportunidad-img" width="447" height="447">
+        <img src="${ASSET_PATHS.cmr}" alt="Tarjeta CMR Banco Falabella" class="cmr-card-img" width="409" height="644">
       </div>
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
+      ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-block">
         <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
       </div>
+      ` : ''}
       ${ctx.hasNormal ? `
         <div class="price-normal-row">
           PRECIO NORMAL <span class="val">${formatCLP(state.precioNormal)}</span>

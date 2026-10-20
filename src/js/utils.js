@@ -4,8 +4,10 @@
 
 // Formateador de moneda en pesos chilenos ($1.099.990)
 function formatCLP(val) {
-  if (val === null || val === undefined || val === '' || isNaN(val)) return '';
-  const num = Math.round(Number(val));
+  if (val === null || val === undefined || val === '') return '';
+  const clean = typeof val === 'number' ? val : parseCLP(val);
+  if (clean === null || isNaN(clean)) return '';
+  const num = Math.round(Number(clean));
   return '$' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 

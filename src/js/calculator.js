@@ -2,9 +2,13 @@
  * Motor de cálculos financieros para tarjetas de crédito (CMR) y CAE
  */
 
+// Monto mínimo oficial Falabella para simulación de 12 cuotas CMR
+const MONTO_MINIMO_CUOTAS = 60000;
+
 // Motor de cálculo financiero para 12 cuotas con tarjeta CMR y CAE
 function calcularFinanciamiento(monto, caePorcentaje) {
-  if (!monto || monto <= 0) {
+  // En retail Falabella, la simulación de 12 cuotas aplica SOLAMENTE sobre los $60.000
+  if (!monto || monto <= MONTO_MINIMO_CUOTAS) {
     return { cuota: 0, ctc: 0 };
   }
 
@@ -45,21 +49,25 @@ function getMontoFinanciamiento() {
 // Retorna los valores de cuota y CTC actuales a mostrar en el cartel
 function getValoresCuotaActuales() {
   const monto = getMontoFinanciamiento();
+  // Solamente sobre los $60.000 se permite simulación de cuotas
+  if (monto <= MONTO_MINIMO_CUOTAS) {
+    return { cuota: 0, ctc: 0 };
+  }
+
   if (!state.autoCalcularCuotas) {
     return {
       cuota: state.cuotaMontoManual || 0,
       ctc: state.ctcManual || 0
     };
   }
-  const res = calcularFinanciamiento(monto, state.cae);
-  return res;
+  return calcularFinanciamiento(monto, state.cae);
 }
 
 // Actualizar cálculos de cuotas en el panel de control lateral
 function updateCalculos() {
   if (!dom.calcSummaryBox) return;
   const monto = getMontoFinanciamiento();
-  if (monto > 0) {
+  if (monto > MONTO_MINIMO_CUOTAS) {
     const res = calcularFinanciamiento(monto, state.cae);
     dom.calcSummaryBox.style.display = 'flex';
     dom.calcCuotaDisplay.textContent = formatCLP(res.cuota);
@@ -71,5 +79,28 @@ function updateCalculos() {
     }
   } else {
     dom.calcSummaryBox.style.display = 'none';
+    if (state.autoCalcularCuotas) {
+      state.cuotaMontoCalculado = 0;
+      state.ctcCalculado = 0;
+    }
   }
+}
+
+// Compatibilidad modular y CommonJS para tests unitarios
+if (typeof window !== 'undefined') {
+  window.MONTO_MINIMO_CUOTAS = MONTO_MINIMO_CUOTAS;
+  window.calcularFinanciamiento = calcularFinanciamiento;
+  window.getMontoFinanciamiento = getMontoFinanciamiento;
+  window.getValoresCuotaActuales = getValoresCuotaActuales;
+  window.updateCalculos = updateCalculos;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    MONTO_MINIMO_CUOTAS,
+    calcularFinanciamiento,
+    getMontoFinanciamiento,
+    getValoresCuotaActuales,
+    updateCalculos
+  };
 }

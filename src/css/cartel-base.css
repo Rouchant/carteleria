@@ -282,7 +282,10 @@
   word-spacing: 1.5px;
 }
 
-.template-code-badge {
+.template-code-badge,
+.cartel-sheet .template-code-badge {
+  display: none;
+  visibility: hidden;
   color: #555555;
   font-weight: 600;
   letter-spacing: 0.5px;
@@ -301,6 +304,83 @@
 .divider-line {
   background-color: #cbd5e1;
   flex-shrink: 0;
+}
+
+/* ========================================================
+   Páginas Físicas Tamaño Carta para Agrupación de Lotes
+   ======================================================== */
+.batch-print-page {
+  width: 216mm;
+  height: 279mm;
+  max-width: 216mm;
+  max-height: 279mm;
+  box-sizing: border-box;
+  background: #ffffff;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.batch-print-page.layout-12x3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10mm 15mm;
+  gap: 2mm;
+}
+
+.batch-print-page.layout-12x3 .cartel-sheet.t-12x3 {
+  width: 120mm;
+  height: 30mm;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-bottom: 2mm;
+}
+
+.batch-print-page.layout-12x3 .cartel-sheet.t-12x3:last-child {
+  margin-bottom: 0;
+}
+
+.batch-print-page.layout-6x4 {
+  display: grid;
+  grid-template-columns: repeat(3, 60mm);
+  grid-auto-rows: 40mm;
+  gap: 2mm 3mm;
+  padding: 12mm 13.5mm;
+  justify-content: center;
+  align-content: start;
+}
+
+.batch-print-page.layout-9x7 {
+  display: grid;
+  grid-template-columns: repeat(2, 90mm);
+  grid-auto-rows: 70mm;
+  gap: 4mm 6mm;
+  padding: 15mm 15mm;
+  justify-content: center;
+  align-content: start;
+}
+
+.batch-print-page.layout-9x13 {
+  display: grid;
+  grid-template-columns: repeat(2, 90mm);
+  grid-auto-rows: 130mm;
+  gap: 3mm 6mm;
+  padding: 6mm 15mm;
+  justify-content: center;
+  align-content: start;
+}
+
+.batch-print-page.layout-single {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
 }
 
 /* Configuración de Página para Impresión (Elimina márgenes y cabeceras/pies de navegador) */
@@ -339,6 +419,16 @@
 
   .editor-sidebar,
   .preview-toolbar,
+  .batch-preview-bar,
+  #batchPreviewBar,
+  .preview-stage .batch-preview-bar,
+  .preview-stage #batchPreviewBar,
+  main .batch-preview-bar,
+  main #batchPreviewBar,
+  .batch-preview-tabs-scroll,
+  #batchTabsList,
+  .batch-view-actions,
+  #btnToggleBatchView,
   .mobile-nav-bar,
   .mobile-preview-actions,
   .btn-view-mobile,
@@ -347,6 +437,15 @@
   .app-watermark,
   .app-layout[data-active-tab="editor"] .editor-sidebar {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .preview-stage,
@@ -383,16 +482,132 @@
     height: auto !important;
   }
 
+  /* Impresión individual: evitar quiebres huérfanos dentro y después del único cartel */
+  .cartel-sheet:not(.batch-print-item) {
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-after: avoid !important;
+    break-before: avoid !important;
+  }
+
   .cartel-sheet {
     box-shadow: none !important;
     margin: 0 !important;
-    page-break-after: avoid !important;
-    page-break-before: avoid !important;
     page-break-inside: avoid !important;
-    break-after: avoid !important;
-    break-before: avoid !important;
     break-inside: avoid !important;
     overflow: hidden !important;
+  }
+
+  /* Impresión por lote: Agrupación en páginas Carta físicas protegidas contra cortes */
+  .batch-print-page {
+    width: 216mm !important;
+    height: 279mm !important;
+    max-width: 216mm !important;
+    max-height: 279mm !important;
+    box-sizing: border-box !important;
+    background: #ffffff !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-before: auto !important;
+    break-before: auto !important;
+    position: relative !important;
+  }
+
+  .batch-print-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  .batch-print-page .cartel-sheet {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+    box-shadow: none !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .batch-print-page.layout-12x3 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding: 10mm 15mm !important;
+    gap: 2mm !important;
+  }
+
+  .batch-print-page.layout-12x3 .cartel-sheet.t-12x3 {
+    width: 120mm !important;
+    height: 30mm !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    flex-shrink: 0 !important;
+    margin-bottom: 2mm !important;
+  }
+
+  .batch-print-page.layout-12x3 .cartel-sheet.t-12x3:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .batch-print-page.layout-6x4 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 60mm) !important;
+    grid-auto-rows: 40mm !important;
+    gap: 2mm 3mm !important;
+    padding: 12mm 13.5mm !important;
+    justify-content: center !important;
+    align-content: start !important;
+  }
+
+  .batch-print-page.layout-9x7 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 90mm) !important;
+    grid-auto-rows: 70mm !important;
+    gap: 4mm 6mm !important;
+    padding: 15mm 15mm !important;
+    justify-content: center !important;
+    align-content: start !important;
+  }
+
+  .batch-print-page.layout-9x13 {
+    display: grid !important;
+    grid-template-columns: repeat(2, 90mm) !important;
+    grid-auto-rows: 130mm !important;
+    gap: 3mm 6mm !important;
+    padding: 6mm 15mm !important;
+    justify-content: center !important;
+    align-content: start !important;
+  }
+
+  .batch-print-page.layout-single {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+  }
+
+  /* Carteles directos en impresión por lote (formatos de 1 por página como Carta P_118, Góndola 13x19, Pedestal 15x21) */
+  #cartelContainer > .cartel-sheet.batch-print-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    overflow: hidden !important;
+  }
+
+  #cartelContainer > .cartel-sheet.batch-print-item:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
   }
 
   /* Alineación arriba a la izquierda sin margen (0) para corte directo al ras de la hoja */
@@ -409,18 +624,49 @@
     box-shadow: none !important;
   }
 
+  .qr-box {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  .template-code-badge,
+  .cartel-sheet .template-code-badge {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .qr-box img {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+
   /* En PC / Escritorio: Formato Carta completo al 100% ocupando la página completa (216 x 279 mm) */
-  .cartel-sheet.p118 {
+  .cartel-sheet.p118,
+  .cartel-sheet.t-6x4-sheet {
     width: 216mm !important;
     height: 279mm !important;
     max-width: 100% !important;
     max-height: 100% !important;
-    padding: 16mm 14mm 12mm 14mm !important;
     box-sizing: border-box !important;
     margin: 0 auto !important;
     overflow: hidden !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  .cartel-sheet.p118 {
+    padding: 16mm 14mm 12mm 14mm !important;
+  }
+
+  .cartel-sheet.t-6x4-sheet {
+    padding: 10mm 12mm !important;
+  }
+
+  .cartel-sheet.p118:not(.batch-print-item),
+  .cartel-sheet.t-6x4-sheet:not(.batch-print-item) {
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
@@ -448,6 +694,10 @@
     justify-content: space-between !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+  }
+
+  .is-mobile-device .cartel-sheet.p118:not(.batch-print-item),
+  body.is-mobile-device .cartel-sheet.p118:not(.batch-print-item) {
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
@@ -630,12 +880,8 @@
 
   .is-mobile-device .p118 .template-code-badge,
   body.is-mobile-device .p118 .template-code-badge {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-size: 6pt !important;
-    display: block !important;
+    display: none !important;
+    visibility: hidden !important;
   }
 
   .is-mobile-device .cartel-sheet.t-6x4-sheet,
@@ -649,10 +895,17 @@
     overflow: hidden !important;
   }
 
-  .is-mobile-device #cartelContainer,
-  body.is-mobile-device #cartelContainer {
+  .is-mobile-device #cartelContainer:not(:has(.batch-print-item)),
+  body.is-mobile-device:not(.is-batch-printing) #cartelContainer {
     max-height: 220mm !important;
     overflow: hidden !important;
+  }
+
+  body.is-batch-printing #cartelContainer,
+  #cartelContainer:has(.batch-print-item) {
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   /* Media Query estándar por resolución de dispositivo móvil (iPhone / Android) */
@@ -671,6 +924,9 @@
       justify-content: space-between !important;
       page-break-inside: avoid !important;
       break-inside: avoid !important;
+    }
+
+    .cartel-sheet.p118:not(.batch-print-item) {
       page-break-after: avoid !important;
       break-after: avoid !important;
     }
@@ -729,12 +985,8 @@
     }
     .p118 .fpuntos-badge { width: 15mm !important; height: 15mm !important; }
     .p118 .template-code-badge {
-      position: absolute !important;
-      bottom: 0 !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      font-size: 6pt !important;
-      display: block !important;
+      display: none !important;
+      visibility: hidden !important;
     }
 
     .cartel-sheet.t-6x4-sheet {

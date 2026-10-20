@@ -1,0 +1,756 @@
+/* ==========================================================================
+   ESTILOS MODULARES: MODO POR LOTE (MULTI-SKU), AUTOFILL & SELECTOR DE MODO
+   ========================================================================== */
+
+/* 1. Selector de Modo: Manual (1 SKU) vs Lote Multi-SKU */
+.mode-tabs-wrapper {
+  padding: 10px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mode-tabs {
+  display: flex;
+  background: #e2e8f0;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.mode-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-tab:hover {
+  color: #1e293b;
+}
+
+.mode-tab.is-active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.mode-tab.is-active svg {
+  color: var(--primary);
+}
+
+.batch-pill-counter {
+  font-size: 10px;
+  background: var(--primary);
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+/* 2. SKU Input Group con Botón Rellenar al Lado en Modo Manual */
+.sku-input-wrapper {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.sku-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-autofill-sku {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  background: linear-gradient(135deg, #a4d233 0%, #76a81e 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(118, 168, 30, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btn-autofill-sku:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b0dc3f 0%, #689617 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(118, 168, 30, 0.35);
+}
+
+.btn-autofill-sku:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-autofill-sku:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-autofill-sku .autofill-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.btn-autofill-sku:hover .autofill-icon {
+  transform: scale(1.15);
+}
+
+/* Disclaimer en amarillo tras usar botón Rellenar */
+.autofill-disclaimer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 3px solid #eab308;
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  line-height: 1.35;
+  font-weight: 600;
+  color: #854d0e;
+  box-shadow: 0 1px 3px rgba(234, 179, 8, 0.08);
+}
+
+.autofill-disclaimer .disclaimer-icon {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.autofill-disclaimer.hidden {
+  display: none;
+}
+
+.mode-panel {
+  display: block;
+}
+
+/* 3. Panel de Carga y Acciones de Lote */
+.batch-input-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.batch-hint-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.batch-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  background: #ffffff;
+  color: var(--text-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.batch-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(126, 168, 38, 0.15);
+}
+
+.batch-actions-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-load-batch {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #a4d233 0%, #76a81e 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(118, 168, 30, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-load-batch:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b0dc3f 0%, #689617 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(118, 168, 30, 0.35);
+}
+
+.btn-load-batch:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-chip-secondary {
+  padding: 10px 14px;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-chip-secondary:hover {
+  background: #f1f5f9;
+  color: var(--text-main);
+}
+
+.batch-status-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #475569;
+}
+
+.batch-status-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #cbd5e1;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.batch-status-box.is-loading .batch-status-spinner {
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+
+.btn-sync-vigencia {
+  width: 100%;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-sync-vigencia:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.section-title-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.batch-items-count-badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: #e2e8f0;
+  color: #475569;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.batch-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.batch-empty-state {
+  text-align: center;
+  padding: 24px 16px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  color: #64748b;
+}
+
+.batch-empty-state .empty-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.batch-empty-state p {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.batch-empty-state span {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* 4. Tarjetas individuales de SKU en la lista de Lote */
+.batch-item-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.batch-item-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.batch-item-card.is-active {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(126, 168, 38, 0.2);
+}
+
+.batch-item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.batch-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.batch-item-sku-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.batch-item-sku {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.batch-item-brand {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-transform: uppercase;
+}
+
+.batch-item-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-batch-card-action {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-batch-card-action:hover {
+  background: #f1f5f9;
+  color: #ef4444;
+}
+
+.batch-item-prices-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.batch-price-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.batch-price-group label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.batch-price-group input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  padding: 5px 12px 5px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  text-align: right;
+  background: #f8fafc;
+  line-height: 1.2;
+}
+
+.batch-price-group input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: var(--primary);
+}
+
+.batch-item-vigencia-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: #64748b;
+  padding-top: 4px;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.batch-subgroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.batch-subgroup span {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.batch-subgroup input {
+  font-family: inherit;
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  color: #334155;
+  background: #f8fafc;
+}
+
+.batch-subgroup input[type="number"] {
+  width: 64px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 8px 2px 4px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.btn-item-to-individual {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+}
+
+.btn-item-to-individual:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+/* 5. Barra de Pestañas en Preview Stage */
+.batch-preview-bar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 10;
+}
+
+.batch-preview-tabs-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 0;
+  flex: 1;
+}
+
+.batch-tab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.batch-tab-pill:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.batch-tab-pill.is-active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(118, 168, 30, 0.15);
+}
+
+.btn-batch-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.btn-batch-view-toggle:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.footer-actions-group {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.footer-actions-group.hidden {
+  display: none;
+}
+
+/* 6. Vista Mosaico de Lote */
+.batch-mosaic-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px 16px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.batch-mosaic-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.2s ease;
+  position: relative;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.batch-mosaic-card:hover {
+  transform: translateY(-5px);
+  border-color: #00843D;
+  box-shadow: 0 14px 28px rgba(0, 132, 61, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.batch-mosaic-card.is-active {
+  border-color: #00843D;
+  box-shadow: 0 0 0 2px #00843D, 0 8px 24px rgba(0, 132, 61, 0.15);
+}
+
+.batch-mosaic-viewport {
+  position: relative;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.batch-mosaic-viewport .cartel-sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  pointer-events: none;
+  box-shadow: none;
+  margin: 0;
+}
+
+.batch-mosaic-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.batch-mosaic-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.batch-mosaic-card.is-active .batch-mosaic-badge {
+  background: #00843D;
+  color: #ffffff;
+  border-color: #00843D;
+}
+
+.batch-mosaic-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.batch-mosaic-brand {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+
+.batch-mosaic-sub {
+  font-size: 10.5px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.batch-mosaic-price {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 800;
+  color: #00843D;
+  font-family: 'LINESeedJP', sans-serif;
+}
+
+
+/* 7. Reglas de Impresión de Lote */
+@media print {
+  .batch-preview-bar,
+  #batchPreviewBar,
+  .preview-stage .batch-preview-bar,
+  .preview-stage #batchPreviewBar,
+  main .batch-preview-bar,
+  main #batchPreviewBar,
+  .batch-preview-tabs-scroll,
+  #batchTabsList,
+  .batch-view-actions,
+  #btnToggleBatchView {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}

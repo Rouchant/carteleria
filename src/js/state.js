@@ -25,65 +25,106 @@ const state = {
   cuotaMontoManual: 101292,
   ctcManual: 1223424,
   template: 'p118', // 'p118', 'p132', 'p123', 'p121', 't-15x21', 't-9x13', 't-9x7', 't-12x3', 't-6x4', 't-6x4-sheet'
-  zoom: 0.75
+  zoom: 0.75,
+  mode: 'manual', // 'manual' | 'batch'
+  batchItems: [],
+  activeBatchIndex: 0,
+  batchViewMode: 'single', // 'single' | 'mosaic'
+  batchVigenciaDesde: semanaInicial.desde,
+  batchVigenciaHasta: semanaInicial.hasta,
+  batchCae: 39.93
 };
 
-// Cargar preset de ejemplo
+// Mapeo completo declarativo de configuración de presets
+const PRESET_CONFIG_MAP = {
+  'asus-full': {
+    data: {
+      marca: 'MARCA',
+      categoria: 'Categoria',
+      modelo: 'Modelo',
+      sku: '00000000',
+      precioCmr: 999990,
+      precioOferta: 999990,
+      precioNormal: 999990,
+      cae: 39.93,
+      autoCalcularCuotas: true
+    },
+    message: 'Ejemplo Oportunidad Única cargado'
+  },
+  'sin-cmr': {
+    data: {
+      marca: 'MARCA',
+      categoria: 'Categoria',
+      modelo: 'Modelo',
+      sku: '00000000',
+      precioCmr: null,
+      precioOferta: 999990,
+      precioNormal: 999990,
+      cae: 39.93,
+      autoCalcularCuotas: true
+    },
+    message: 'Ejemplo Todo Medio de Pago cargado'
+  },
+  'solo-normal': {
+    data: {
+      marca: 'MARCA',
+      categoria: 'Categoria',
+      modelo: 'Modelo',
+      sku: '00000000',
+      precioCmr: null,
+      precioOferta: null,
+      precioNormal: 999990,
+      cae: 39.93,
+      autoCalcularCuotas: true
+    },
+    message: 'Ejemplo Solo Precio Normal cargado'
+  },
+  'clean': {
+    data: {
+      marca: '',
+      categoria: '',
+      modelo: '',
+      sku: '',
+      precioCmr: null,
+      precioOferta: null,
+      precioNormal: null,
+      fechasPersonalizadas: false
+    },
+    resetDates: true,
+    message: 'Formulario limpiado'
+  }
+};
+
+// Cargar preset de ejemplo mediante mapeo declarativo
 function applyPreset(type) {
-  // Solo preformatear fechas a la semana vigente si el usuario NO ha escogido fechas a mano
-  if (!state.fechasPersonalizadas) {
+  const preset = PRESET_CONFIG_MAP[type];
+  if (!preset) return;
+
+  // Solo preformatear fechas a la semana vigente si el usuario NO ha escogido fechas a mano o si es limpieza
+  if (!state.fechasPersonalizadas || preset.resetDates) {
     const semana = (typeof getSemanaVigenteActual === 'function') ? getSemanaVigenteActual() : semanaInicial;
     state.vigenciaDesde = semana.desde;
     state.vigenciaHasta = semana.hasta;
+    state.batchVigenciaDesde = semana.desde;
+    state.batchVigenciaHasta = semana.hasta;
   }
 
-  if (type === 'asus-full') {
-    state.marca = 'MARCA';
-    state.categoria = 'Categoria';
-    state.modelo = 'Modelo';
-    state.sku = '00000000';
-    state.precioCmr = 999990;
-    state.precioOferta = 999990;
-    state.precioNormal = 999990;
-    state.cae = 39.93;
-    state.autoCalcularCuotas = true;
-    showToast('Ejemplo Oportunidad Única cargado');
-  } else if (type === 'sin-cmr') {
-    state.marca = 'MARCA';
-    state.categoria = 'Categoria';
-    state.modelo = 'Modelo';
-    state.sku = '00000000';
-    state.precioCmr = null;
-    state.precioOferta = 999990;
-    state.precioNormal = 999990;
-    state.cae = 39.93;
-    state.autoCalcularCuotas = true;
-    showToast('Ejemplo Todo Medio de Pago cargado');
-  } else if (type === 'solo-normal') {
-    state.marca = 'MARCA';
-    state.categoria = 'Categoria';
-    state.modelo = 'Modelo';
-    state.sku = '00000000';
-    state.precioCmr = null;
-    state.precioOferta = null;
-    state.precioNormal = 999990;
-    state.cae = 39.93;
-    state.autoCalcularCuotas = true;
-    showToast('Ejemplo Solo Precio Normal cargado');
-  } else if (type === 'clean') {
-    state.marca = '';
-    state.categoria = '';
-    state.modelo = '';
-    state.sku = '';
-    state.precioCmr = null;
-    state.precioOferta = null;
-    state.precioNormal = null;
-    state.fechasPersonalizadas = false;
-    const semana = (typeof getSemanaVigenteActual === 'function') ? getSemanaVigenteActual() : semanaInicial;
-    state.vigenciaDesde = semana.desde;
-    state.vigenciaHasta = semana.hasta;
-    showToast('Formulario limpiado');
+  Object.assign(state, preset.data);
+
+  if (type === 'clean') {
+    if (dom.autofillDisclaimer) {
+      dom.autofillDisclaimer.classList.add('hidden');
+    }
+    // Limpieza total: resetear y quitar todos los elementos adicionales del modo por lote
+    if (typeof clearBatch === 'function') {
+      clearBatch();
+    } else {
+      state.batchItems = [];
+      state.activeBatchIndex = 0;
+    }
   }
+
+  showToast(preset.message);
 
   syncFormFromState();
   if (typeof updateCalculos === 'function') updateCalculos();
@@ -110,6 +151,17 @@ function syncFormFromState() {
   dom.inputCuotaManual.value = formatCLP(state.cuotaMontoManual);
   dom.inputCtcManual.value = formatCLP(state.ctcManual);
   dom.manualCalcFields.style.display = state.autoCalcularCuotas ? 'none' : 'grid';
+
+  // Sincronizar campos de vigencia y CAE para modo lote
+  if (dom.inputBatchVigenciaDesde) {
+    dom.inputBatchVigenciaDesde.value = state.batchVigenciaDesde || state.vigenciaDesde;
+  }
+  if (dom.inputBatchVigenciaHasta) {
+    dom.inputBatchVigenciaHasta.value = state.batchVigenciaHasta || state.vigenciaHasta;
+  }
+  if (dom.inputBatchCae) {
+    dom.inputBatchCae.value = state.batchCae || state.cae || 39.93;
+  }
 
   if (typeof updateCalculos === 'function') updateCalculos();
 }

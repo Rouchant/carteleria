@@ -80,8 +80,47 @@ function initDOMReferences() {
 
     // Selector de plantillas y presets
     templateCards: document.querySelectorAll('.template-card'),
-    presetChips: document.querySelectorAll('.preset-chip')
+    presetChips: document.querySelectorAll('.preset-chip'),
+
+    // Selector de Modo y Paneles
+    tabModeManual: document.getElementById('tabModeManual'),
+    tabModeBatch: document.getElementById('tabModeBatch'),
+    panelModeManual: document.getElementById('panelModeManual'),
+    panelModeBatch: document.getElementById('panelModeBatch'),
+    manualFooterActions: document.getElementById('manualFooterActions'),
+    batchFooterActions: document.getElementById('batchFooterActions'),
+
+    // Botón Autofill SKU Manual
+    btnAutofillSku: document.getElementById('btnAutofillSku'),
+    btnAutofillText: document.getElementById('btnAutofillText'),
+    autofillDisclaimer: document.getElementById('autofillDisclaimer'),
+
+    // Modo por Lote
+    inputBatchSkus: document.getElementById('inputBatchSkus'),
+    btnLoadBatch: document.getElementById('btnLoadBatch'),
+    btnLoadBatchText: document.getElementById('btnLoadBatchText'),
+    btnClearBatch: document.getElementById('btnClearBatch'),
+    batchStatusBox: document.getElementById('batchStatusBox'),
+    batchStatusText: document.getElementById('batchStatusText'),
+    inputBatchVigenciaDesde: document.getElementById('inputBatchVigenciaDesde'),
+    inputBatchVigenciaHasta: document.getElementById('inputBatchVigenciaHasta'),
+    inputBatchCae: document.getElementById('inputBatchCae'),
+    btnApplyBatchVigencia: document.getElementById('btnApplyBatchVigencia'),
+    batchCountBadge: document.getElementById('batchCountBadge'),
+    batchPillCounter: document.getElementById('batchPillCounter'),
+    batchItemsContainer: document.getElementById('batchItemsContainer'),
+    batchEmptyState: document.getElementById('batchEmptyState'),
+
+    // Vista previa por lote
+    batchPreviewBar: document.getElementById('batchPreviewBar'),
+    batchTabsList: document.getElementById('batchTabsList'),
+    btnToggleBatchView: document.getElementById('btnToggleBatchView'),
+    btnToggleBatchViewText: document.getElementById('btnToggleBatchViewText'),
+    previewStatusLabel: document.getElementById('previewStatusLabel'),
+    btnBatchPrint: document.getElementById('btnBatchPrint'),
+    btnBatchDownloadPdf: document.getElementById('btnBatchDownloadPdf')
   };
+  window.dom = dom;
 }
 
 // Inicialización del autocompletado inteligente de categorías
@@ -144,12 +183,26 @@ function bindEvents() {
     });
   });
 
-  // CAE
-  dom.inputCae.addEventListener('input', (e) => {
-    state.cae = parseFloat(e.target.value) || 0;
+  // CAE: Sincronización reactiva bidireccional entre Individual y Por Lote
+  const handleCaeUpdate = (e) => {
+    const val = parseFloat(e.target.value) || 0;
+    state.cae = val;
+    state.batchCae = val;
+    if (dom.inputBatchCae) {
+      dom.inputBatchCae.value = e.target.value;
+    }
+    if (state.batchItems && state.batchItems[state.activeBatchIndex]) {
+      state.batchItems[state.activeBatchIndex].cae = val;
+      if (dom.batchItemsContainer) {
+        const activeCardCae = dom.batchItemsContainer.querySelector(`.input-batch-cae[data-idx="${state.activeBatchIndex}"]`);
+        if (activeCardCae) activeCardCae.value = e.target.value;
+      }
+    }
     updateCalculos();
     renderCartel();
-  });
+  };
+  dom.inputCae.addEventListener('input', handleCaeUpdate);
+  dom.inputCae.addEventListener('change', handleCaeUpdate);
 
   // Checkbox de autocalcular cuotas
   dom.checkAutoCalc.addEventListener('change', (e) => {
@@ -172,14 +225,21 @@ function bindEvents() {
     renderCartel();
   });
 
-  // Selector de plantillas
+  // Selector de plantillas con soporte de accesibilidad (clic y teclado Enter/Espacio)
   dom.templateCards.forEach(card => {
-    card.addEventListener('click', () => {
+    const selectTemplate = () => {
       dom.templateCards.forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       state.template = card.dataset.template;
       renderCartel();
       showToast(`Plantilla cambiada a ${card.dataset.name}`);
+    };
+    card.addEventListener('click', selectTemplate);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectTemplate();
+      }
     });
   });
 
@@ -209,13 +269,20 @@ function bindEvents() {
   function triggerPrint() {
     detectMobileDevice();
     const prevTab = dom.appLayout ? dom.appLayout.dataset.activeTab : 'editor';
+    const bar = dom.batchPreviewBar || document.getElementById('batchPreviewBar');
+    const prevBarDisplay = bar ? bar.style.display : '';
 
     // 1. Asegurar que la pestaña activa sea preview para que el cartel esté visible en el render-tree móvil
     if (dom.appLayout) {
       dom.appLayout.dataset.activeTab = 'preview';
     }
 
-    // 2. Desactivar transform de zoom inmediatamente (Chrome iOS no dispara beforeprint)
+    // 2. Ocultar barra de pestañas de lote durante la impresión
+    if (bar) {
+      bar.style.display = 'none';
+    }
+
+    // 3. Desactivar transform de zoom inmediatamente (Chrome iOS no dispara beforeprint)
     const prevTransform = dom.previewWrapper ? dom.previewWrapper.style.transform : '';
     const prevTransition = dom.previewWrapper ? dom.previewWrapper.style.transition : '';
     if (dom.previewWrapper) {
@@ -223,11 +290,11 @@ function bindEvents() {
       dom.previewWrapper.style.transform = 'none';
     }
 
-    // 3. Pequeña espera para reflujo garantizado antes de invocar el motor de impresión nativo
+    // 4. Pequeña espera para reflujo garantizado antes de invocar el motor de impresión nativo
     setTimeout(() => {
       window.print();
 
-      // 4. Restaurar zoom y pestaña después de presentar el diálogo de impresión
+      // 5. Restaurar zoom, pestaña y barra después de presentar el diálogo de impresión
       setTimeout(() => {
         if (dom.previewWrapper) {
           dom.previewWrapper.style.transform = prevTransform;
@@ -235,6 +302,9 @@ function bindEvents() {
         }
         if (dom.appLayout) {
           dom.appLayout.dataset.activeTab = prevTab;
+        }
+        if (bar) {
+          bar.style.display = prevBarDisplay;
         }
       }, 500);
     }, 120);
@@ -251,16 +321,30 @@ function bindEvents() {
     if (dom.previewWrapper) {
       dom.previewWrapper.style.transform = 'none';
     }
+    const bar = dom.batchPreviewBar || document.getElementById('batchPreviewBar');
+    if (bar) {
+      bar.style.display = 'none';
+    }
   });
 
   window.addEventListener('afterprint', () => {
+    document.body.classList.remove('is-batch-printing');
     applyZoom();
+    const bar = dom.batchPreviewBar || document.getElementById('batchPreviewBar');
+    if (bar && state.mode === 'batch' && state.batchItems && state.batchItems.length > 0) {
+      bar.style.display = '';
+    }
   });
 
   // Botón Descargar PDF
   dom.btnDownloadPdf.addEventListener('click', () => {
     exportToPDF();
   });
+
+  // Vinculación de eventos de Modo por Lote y SKU Autofill (modularizado en batch.js)
+  if (typeof bindBatchEvents === 'function') {
+    bindBatchEvents();
+  }
 
   // Chips de presets
   dom.presetChips.forEach(chip => {
@@ -300,8 +384,13 @@ function bindEvents() {
 
 // Aplicar zoom visual al preview
 function applyZoom() {
-  dom.previewWrapper.style.transform = `scale(${state.zoom})`;
-  dom.zoomLevelText.textContent = `${Math.round(state.zoom * 100)}%`;
+  if (state.mode === 'batch' && state.batchViewMode === 'mosaic') {
+    if (dom.previewWrapper) dom.previewWrapper.style.transform = 'none';
+    if (dom.zoomLevelText) dom.zoomLevelText.textContent = 'Mosaico';
+    return;
+  }
+  if (dom.previewWrapper) dom.previewWrapper.style.transform = `scale(${state.zoom})`;
+  if (dom.zoomLevelText) dom.zoomLevelText.textContent = `${Math.round(state.zoom * 100)}%`;
 }
 
 // Cambiar pestaña activa en dispositivos móviles
@@ -323,6 +412,7 @@ function switchMobileTab(tab) {
 
 // Auto-ajustar zoom al ancho visible de pantalla
 function autoFitZoom() {
+  if (state.mode === 'batch' && state.batchViewMode === 'mosaic') return;
   if (!dom.canvasContainer || !dom.cartelContainer) return;
   const sheet = dom.cartelContainer.querySelector('.cartel-sheet') || dom.cartelContainer.firstElementChild;
   if (!sheet) return;
@@ -339,13 +429,9 @@ function autoFitZoom() {
   }
 }
 
-// Renderizador principal del Cartel en el DOM
-function renderCartel() {
-  const container = dom.cartelContainer;
-  if (!container) return;
-  container.innerHTML = '';
-
-  const tpl = state.template;
+// Genera el elemento DOM del Cartel para el estado actual
+function renderCartelElement(overrideTemplate) {
+  const tpl = overrideTemplate || state.template;
   const hasCmr = state.precioCmr && state.precioCmr > 0;
   const hasOferta = state.precioOferta && state.precioOferta > 0;
   const hasNormal = state.precioNormal && state.precioNormal > 0;
@@ -369,86 +455,56 @@ function renderCartel() {
   // Cálculos de cuota
   const financiamiento = getValoresCuotaActuales();
 
-  // Renderizar según plantilla seleccionada
-  if (tpl === 'p118' || tpl === 'p132') {
-    renderVerticalTemplate(sheet, tpl, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 't-15x21') {
-    render15x21(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 't-9x13') {
-    render9x13(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 't-9x7') {
-    render9x7(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 'p123') {
-    renderFlejeHorizontal(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr
-    });
-  } else if (tpl === 't-12x3') {
-    render12x3(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr
-    });
-  } else if (tpl === 'p121') {
-    renderFichaP121(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 't-6x4') {
-    render6x4(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
-  } else if (tpl === 't-6x4-sheet') {
-    render6x4Sheet(sheet, {
-      hasCmr,
-      hasOferta,
-      hasNormal,
-      vigenciaStr,
-      financiamiento
-    });
+  // Mapeo completo declarativo de renderizado por plantilla
+  const TEMPLATE_RENDER_MAP = {
+    'p118':        (s, ctx) => renderVerticalTemplate(s, 'p118', ctx),
+    'p132':        (s, ctx) => renderVerticalTemplate(s, 'p132', ctx),
+    't-15x21':     render15x21,
+    't-9x13':      render9x13,
+    't-9x7':       render9x7,
+    'p123':        renderFlejeHorizontal,
+    't-12x3':      render12x3,
+    'p121':        renderFichaP121,
+    't-6x4':       render6x4,
+    't-6x4-sheet': render6x4Sheet
+  };
+
+  const renderFn = TEMPLATE_RENDER_MAP[tpl] || TEMPLATE_RENDER_MAP['p118'];
+  renderFn(sheet, {
+    hasCmr,
+    hasOferta,
+    hasNormal,
+    vigenciaStr,
+    financiamiento
+  });
+
+  // Generar QR para las plantillas que disponen de contenedor QR (.qr-box)
+  const qrTarget = sheet.querySelector('.qr-box');
+  if (qrTarget) {
+    generateQRCode(qrTarget, state.sku);
   }
 
-  container.appendChild(sheet);
+  return sheet;
+}
 
-  // Generar QR para las plantillas que lo soportan (P_118, P_132 y 15x21)
-  if (tpl === 'p118' || tpl === 'p132' || tpl === 't-15x21') {
-    const qrTarget = sheet.querySelector('.qr-box');
-    if (qrTarget) {
-      generateQRCode(qrTarget, state.sku);
-    }
+// Renderizador principal del Cartel en el DOM
+function renderCartel() {
+  if (state.mode === 'batch' && typeof renderActiveView === 'function') {
+    renderActiveView();
+    return;
+  }
+  const container = dom.cartelContainer;
+  if (!container) return;
+  container.innerHTML = '';
+  const sheet = renderCartelElement();
+  if (sheet) {
+    container.appendChild(sheet);
+  }
+  if (state.mode === 'manual' && typeof syncStateToActiveBatchItem === 'function') {
+    syncStateToActiveBatchItem();
   }
 }
+
+// Exposición global para interoperabilidad modular
+window.renderCartelElement = renderCartelElement;
+window.renderCartel = renderCartel;

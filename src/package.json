@@ -7,7 +7,8 @@
     "start": "node server/server.js",
     "test": "node tests/smoketest.js && node tests/tests_quality.js",
     "test:quality": "node tests/tests_quality.js",
-    "test:smoke": "node tests/smoketest.js"
+    "test:smoke": "node tests/smoketest.js",
+    "test:extract": "node tests/test_falabella_extract.js"
   },
   "keywords": [
     "carteleria",

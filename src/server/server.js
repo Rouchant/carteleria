@@ -19,8 +19,39 @@ const MIME_TYPES = {
   '.woff2': 'font/woff2'
 };
 
-const server = http.createServer((req, res) => {
+const { scrapeFalabellaProduct } = require('./falabella-scraper');
+
+const server = http.createServer(async (req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
+
+  // Endpoint API para extracción de SKU desde Falabella
+  if (reqPath.startsWith('/api/sku/') || reqPath.startsWith('/api/scrape')) {
+    const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    let sku = reqPath.startsWith('/api/sku/')
+      ? reqPath.replace('/api/sku/', '').split('/')[0]
+      : parsedUrl.searchParams.get('sku');
+    sku = String(sku || '').replace(/[^0-9]/g, '');
+
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    if (!sku) {
+      res.writeHead(400);
+      res.end(JSON.stringify({ success: false, error: 'SKU no especificado o inválido' }));
+      return;
+    }
+
+    try {
+      const data = await scrapeFalabellaProduct(sku);
+      res.writeHead(200);
+      res.end(JSON.stringify({ success: true, data }));
+    } catch (err) {
+      res.writeHead(500);
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
   if (reqPath === '/') reqPath = '/index.html';
 
   let filePath = path.join(ROOT_DIR, reqPath);

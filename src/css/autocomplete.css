@@ -1,0 +1,176 @@
+/* ==========================================================================
+   MÓDULO: AUTOCOMPLETADO DE CATEGORÍAS FALABELLA RETAIL
+   Generador de Cartelería Retail | Falabella
+   ========================================================================== */
+
+.autocomplete-group {
+  position: relative;
+}
+
+.input-autocomplete-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-autocomplete-wrapper input {
+  padding-right: 30px;
+}
+
+.btn-clear-categoria {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.btn-clear-categoria:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.15), 0 4px 10px -2px rgba(0, 0, 0, 0.08);
+  max-height: 260px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.autocomplete-dropdown.hidden {
+  display: none;
+}
+
+.cat-list {
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px;
+}
+
+.cat-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.cat-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.cat-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.cat-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+  user-select: none;
+}
+
+.cat-item:hover,
+.cat-item.is-active {
+  background: var(--primary-light);
+  color: #274000;
+}
+
+.cat-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: color 0.12s ease;
+}
+
+.cat-item:hover .cat-item-icon,
+.cat-item.is-active .cat-item-icon {
+  color: var(--primary);
+}
+
+.cat-item-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cat-highlight {
+  background: rgba(164, 210, 51, 0.35);
+  color: #1b3802;
+  font-weight: 700;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.cat-dropdown-footer {
+  padding: 6px 10px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.cat-footer-hint {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.cat-empty-state {
+  padding: 16px 12px;
+  text-align: center;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cat-empty-state svg {
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.cat-empty-state p {
+  font-size: 12px;
+  margin: 0;
+  color: #334155;
+}
+
+.cat-empty-state small {
+  font-size: 11px;
+  color: #94a3b8;
+}

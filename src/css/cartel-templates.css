@@ -602,9 +602,11 @@
   width: 120mm;
   height: 30mm;
   padding: 2.5mm 4mm;
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  box-sizing: border-box;
 }
 
 .t-12x3 .left-col {

@@ -10,10 +10,13 @@
   <link rel="icon" type="image/svg+xml" href="src/assets/favicon.svg">
   <link rel="alternate icon" type="image/png" href="src/assets/favicon.png">
   <!-- Estilos Locales Modulares (100% Offline) -->
-  <link rel="stylesheet" href="src/css/fonts.css?v=20261011_9">
-  <link rel="stylesheet" href="src/css/app.css?v=20261011_9">
-  <link rel="stylesheet" href="src/css/cartel-base.css?v=20261013_fit12pct">
-  <link rel="stylesheet" href="src/css/cartel-templates.css?v=20261012_redlabel">
+  <link rel="stylesheet" href="src/css/fonts.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/app.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/autocomplete.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/batch-mode.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/mobile.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/cartel-base.css?v=20261020_17">
+  <link rel="stylesheet" href="src/css/cartel-templates.css?v=20261020_17">
 </head>
 <body>
 
@@ -50,66 +53,113 @@
         </div>
       </header>
 
+      <!-- Selector de Modo: Manual (1 SKU) vs Automático por Lote -->
+      <div class="mode-tabs-wrapper">
+        <div class="mode-tabs" role="tablist" aria-label="Modo de Operación">
+          <button type="button" class="mode-tab is-active" id="tabModeManual" data-mode="manual" role="tab" aria-selected="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Individual</span>
+          </button>
+          <button type="button" class="mode-tab" id="tabModeBatch" data-mode="batch" role="tab" aria-selected="false">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+            <span>Por Lote</span>
+            <span class="batch-pill-counter" id="batchPillCounter">Multi-SKU</span>
+          </button>
+        </div>
+      </div>
+
       <!-- Contenido del formulario de edición -->
       <div class="sidebar-content">
         
-        <!-- Presets rápidos -->
-        <section class="form-section" id="sectionPresets">
-          <div class="section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <span>Ejemplos Rápidos</span>
-          </div>
-          <div class="preset-bar">
-            <button type="button" class="preset-chip" data-preset="asus-full" id="presetAsus">Oportunidad Única</button>
-            <button type="button" class="preset-chip" data-preset="sin-cmr" id="presetSinCmr">Todo Medio de Pago</button>
-            <button type="button" class="preset-chip" data-preset="solo-normal" id="presetSoloNormal">Solo Precio Normal</button>
-            <button type="button" class="preset-chip" data-preset="clean" id="presetClean">Limpiar</button>
-          </div>
-        </section>
-
-        <!-- Información del Producto -->
-        <section class="form-section" id="sectionProducto">
-          <div class="section-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-            <span>Datos del Producto</span>
-          </div>
-          <div class="field-grid">
-            <div class="field-group">
-              <label for="inputMarca">Marca</label>
-              <input type="text" id="inputMarca" placeholder="Marca..." value="MARCA">
+        <!-- PANEL MODO MANUAL -->
+        <div class="mode-panel active" id="panelModeManual">
+          <!-- Presets rápidos -->
+          <section class="form-section" id="sectionPresets">
+            <div class="section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Ejemplos Rápidos</span>
             </div>
+            <div class="preset-bar">
+              <button type="button" class="preset-chip" data-preset="asus-full" id="presetAsus">Oportunidad Única</button>
+              <button type="button" class="preset-chip" data-preset="sin-cmr" id="presetSinCmr">Todo Medio de Pago</button>
+              <button type="button" class="preset-chip" data-preset="solo-normal" id="presetSoloNormal">Solo Precio Normal</button>
+              <button type="button" class="preset-chip" data-preset="clean" id="presetClean">Limpiar</button>
+            </div>
+          </section>
 
-            <div class="field-group autocomplete-group" id="groupCategoria">
-              <label for="inputCategoria">Categoría</label>
-              <div class="input-autocomplete-wrapper">
-                <input type="text" id="inputCategoria" placeholder="Buscar categoría..." value="Categoria" autocomplete="off" spellcheck="false">
-                <button type="button" class="btn-clear-categoria hidden" id="btnClearCategoria" title="Limpiar categoría" aria-label="Limpiar">
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+          <!-- Información del Producto: SKU PRIMERO CON BOTÓN RELLENAR AL LADO -->
+          <section class="form-section" id="sectionProducto">
+            <div class="section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-2z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <span>Datos del Producto</span>
+            </div>
+            <div class="field-grid">
+              <!-- 1. SKU Primero con botón Rellenar Automático a su lado -->
+              <div class="field-group full-width" id="groupSku">
+                <label for="inputSku">
+                  <span>SKU del Producto</span>
+                  <span class="label-hint">Ej: 80739039</span>
+                </label>
+                <div class="sku-input-wrapper">
+                  <input type="text" id="inputSku" placeholder="00000000..." value="00000000">
+                  <button type="button" class="btn-autofill-sku" id="btnAutofillSku" title="Rellenar automáticamente datos desde Falabella.com" aria-label="Rellenar automáticamente datos desde Falabella.com">
+                    <svg class="autofill-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span id="btnAutofillText">Rellenar</span>
+                  </button>
+                </div>
+                <!-- Disclaimer de revisión de precios en caja tras rellenar -->
+                <div class="autofill-disclaimer hidden" id="autofillDisclaimer" role="alert">
+                  <svg class="disclaimer-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
                   </svg>
-                </button>
-                <div class="autocomplete-dropdown hidden" id="categoriaDropdown" role="listbox"></div>
+                  <span>Recuerda revisar los precios en caja antes de implementarlos</span>
+                </div>
+              </div>
+
+              <!-- 2. Marca -->
+              <div class="field-group">
+                <label for="inputMarca">Marca</label>
+                <input type="text" id="inputMarca" placeholder="Marca..." value="MARCA">
+              </div>
+
+              <!-- 3. Categoría -->
+              <div class="field-group autocomplete-group" id="groupCategoria">
+                <label for="inputCategoria">Categoría</label>
+                <div class="input-autocomplete-wrapper">
+                  <input type="text" id="inputCategoria" placeholder="Buscar categoría..." value="Categoria" autocomplete="off" spellcheck="false">
+                  <button type="button" class="btn-clear-categoria hidden" id="btnClearCategoria" title="Limpiar categoría" aria-label="Limpiar">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                  <div class="autocomplete-dropdown hidden" id="categoriaDropdown" role="listbox"></div>
+                </div>
+              </div>
+
+              <!-- 4. Modelo -->
+              <div class="field-group full-width">
+                <label for="inputModelo">Modelo / Descripción</label>
+                <input type="text" id="inputModelo" placeholder="Modelo..." value="Modelo">
               </div>
             </div>
-
-            <div class="field-group">
-              <label for="inputModelo">Modelo</label>
-              <input type="text" id="inputModelo" placeholder="Modelo..." value="Modelo">
-            </div>
-
-            <div class="field-group">
-              <label for="inputSku">SKU</label>
-              <input type="text" id="inputSku" placeholder="00000000..." value="00000000">
-            </div>
-          </div>
-        </section>
+          </section>
 
         <!-- Precios -->
         <section class="form-section" id="sectionPrecios">
@@ -222,8 +272,101 @@
             </div>
           </div>
         </section>
+        </div><!-- /#panelModeManual -->
 
-        <!-- Selector de Plantilla / Tamaño (Último módulo) -->
+        <!-- PANEL MODO POR LOTE (MULTI-SKU) -->
+        <div class="mode-panel" id="panelModeBatch" style="display: none;">
+          <!-- 1. Ingreso de SKUs -->
+          <section class="form-section" id="sectionBatchInput">
+            <div class="section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="12" y1="18" x2="12" y2="12"></line>
+                <line x1="9" y1="15" x2="15" y2="15"></line>
+              </svg>
+              <span>Ingreso de SKUs del Lote</span>
+            </div>
+            <div class="batch-input-card">
+              <label for="inputBatchSkus" class="batch-hint-label">Ingresa o pega los SKUs (separados por coma, espacio o salto de línea):</label>
+              <textarea id="inputBatchSkus" class="batch-textarea" rows="3" placeholder="Ej:&#10;80739039&#10;17482518&#10;16347951"></textarea>
+              <div class="batch-actions-row">
+                <button type="button" class="btn btn-primary btn-load-batch" id="btnLoadBatch" aria-label="Cargar datos del lote">
+                  <svg class="batch-btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                  <span id="btnLoadBatchText">Cargar Datos del Lote</span>
+                </button>
+                <button type="button" class="btn btn-chip-secondary" id="btnClearBatch" title="Limpiar lista" aria-label="Limpiar lista de SKUs">Limpiar</button>
+              </div>
+              <div class="batch-status-box" id="batchStatusBox">
+                <span class="batch-status-spinner" id="batchStatusSpinner"></span>
+                <span class="batch-status-text" id="batchStatusText">En espera de los SKU</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. Vigencia Global para el Lote -->
+          <section class="form-section" id="sectionBatchVigencia">
+            <div class="section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>Vigencia y CAE para todo el Lote</span>
+            </div>
+            <div class="field-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <div class="field-group">
+                <label for="inputBatchVigenciaDesde">Desde</label>
+                <input type="date" id="inputBatchVigenciaDesde">
+              </div>
+              <div class="field-group">
+                <label for="inputBatchVigenciaHasta">Hasta</label>
+                <input type="date" id="inputBatchVigenciaHasta">
+              </div>
+              <div class="field-group">
+                <label for="inputBatchCae">CAE Lote (%)</label>
+                <input type="number" id="inputBatchCae" step="0.01" value="39.93" placeholder="39.93">
+              </div>
+            </div>
+            <button type="button" class="btn-sync-vigencia" id="btnApplyBatchVigencia" aria-label="Aplicar vigencia y CAE a todo el lote">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              </svg>
+              <span>Aplicar vigencia y CAE a todo el lote</span>
+            </button>
+          </section>
+
+          <!-- 3. Lista de Productos del Lote -->
+          <section class="form-section" id="sectionBatchList">
+            <div class="section-title-between">
+              <div class="section-title" style="margin-bottom: 0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span>Productos del Lote</span>
+              </div>
+              <span class="batch-items-count-badge" id="batchCountBadge">0 carteles</span>
+            </div>
+            <div class="batch-items-container" id="batchItemsContainer">
+              <div class="batch-empty-state" id="batchEmptyState">
+                <div class="empty-icon">📦</div>
+                <p>No hay SKUs cargados todavía.</p>
+                <span>Ingresa los códigos SKU arriba y presiona "Cargar Datos del Lote".</span>
+              </div>
+            </div>
+          </section>
+        </div><!-- /#panelModeBatch -->
+
+        <!-- Selector de Plantilla / Tamaño (Común a ambos modos) -->
         <section class="form-section" id="sectionFormatos">
           <div class="section-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -235,7 +378,7 @@
           </div>
           <div class="template-selector-grid">
             <!-- 1. Carta: P_118 -->
-            <div class="template-card active" data-template="p118" data-name="P_118 (Carta)">
+            <div class="template-card active" data-template="p118" data-name="P_118 (Carta)" role="button" tabindex="0" aria-label="Plantilla Carta P_118">
               <div class="template-thumb tall">Carta</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -247,7 +390,7 @@
             </div>
 
             <!-- 2. 151: 13x19 Góndola -->
-            <div class="template-card" data-template="p132" data-name="151 (13x19)">
+            <div class="template-card" data-template="p132" data-name="151 (13x19)" role="button" tabindex="0" aria-label="Plantilla 151 13x19 Góndola">
               <div class="template-thumb tall">13x19</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -259,7 +402,7 @@
             </div>
 
             <!-- 3. 131: 9x13 Pedestal Chico -->
-            <div class="template-card" data-template="t-9x13" data-name="131 (9x13)">
+            <div class="template-card" data-template="t-9x13" data-name="131 (9x13)" role="button" tabindex="0" aria-label="Plantilla 131 9x13 Pedestal">
               <div class="template-thumb tall">9x13</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -271,7 +414,7 @@
             </div>
 
             <!-- 4. 130: 9x7 Ficha Mesón -->
-            <div class="template-card" data-template="t-9x7" data-name="130 (9x7)">
+            <div class="template-card" data-template="t-9x7" data-name="130 (9x7)" role="button" tabindex="0" aria-label="Plantilla 130 9x7 Ficha">
               <div class="template-thumb">9x7</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -283,7 +426,7 @@
             </div>
 
             <!-- 5. 308: 6x4 Individual -->
-            <div class="template-card" data-template="t-6x4" data-name="308 (6x4)">
+            <div class="template-card" data-template="t-6x4" data-name="308 (6x4)" role="button" tabindex="0" aria-label="Plantilla 308 6x4 Individual">
               <div class="template-thumb">6x4</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -295,7 +438,7 @@
             </div>
 
             <!-- 6. 263: 12x3 Fleje Estantería -->
-            <div class="template-card" data-template="t-12x3" data-name="263 (12x3 Fleje)">
+            <div class="template-card" data-template="t-12x3" data-name="263 (12x3 Fleje)" role="button" tabindex="0" aria-label="Plantilla 263 12x3 Fleje">
               <div class="template-thumb wide">12x3</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -307,7 +450,7 @@
             </div>
 
             <!-- 7. 6x4: Hoja Carta Rejilla Completa (18x) -->
-            <div class="template-card" data-template="t-6x4-sheet" data-name="6x4 Rejilla (18x)">
+            <div class="template-card" data-template="t-6x4-sheet" data-name="6x4 Rejilla (18x)" role="button" tabindex="0" aria-label="Plantilla 6x4 Rejilla 18x Hoja Carta">
               <div class="template-thumb tall thumb-sheet">18x</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -319,7 +462,7 @@
             </div>
 
             <!-- 8. 153: 15x21 Pedestal -->
-            <div class="template-card" data-template="t-15x21" data-name="153 (15x21)">
+            <div class="template-card" data-template="t-15x21" data-name="153 (15x21)" role="button" tabindex="0" aria-label="Plantilla 153 15x21 Pedestal">
               <div class="template-thumb tall">15x21</div>
               <div class="template-info">
                 <div class="template-header-row">
@@ -336,25 +479,49 @@
 
       <!-- Barra inferior fija con botones principales -->
       <footer class="sidebar-footer">
-        <button type="button" class="btn btn-secondary" id="btnPrint" title="Abre el diálogo nativo de impresión para imprimir directo o guardar como PDF">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-            <rect x="6" y="14" width="12" height="8"></rect>
-          </svg>
-          <span>Imprimir</span>
-        </button>
+        <!-- Acciones Modo Manual -->
+        <div class="footer-actions-group" id="manualFooterActions">
+          <button type="button" class="btn btn-secondary" id="btnPrint" title="Abre el diálogo nativo de impresión para imprimir directo o guardar como PDF" aria-label="Imprimir cartel individual">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Imprimir</span>
+          </button>
 
-        <button type="button" class="btn btn-primary" id="btnDownloadPdf" title="Descarga directa del PDF en dimensiones reales 300 DPI">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span>Descargar PDF</span>
-        </button>
+          <button type="button" class="btn btn-primary" id="btnDownloadPdf" title="Descarga directa del PDF en dimensiones reales 300 DPI" aria-label="Descargar PDF en alta resolución">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Descargar PDF</span>
+          </button>
+        </div>
 
-        <button type="button" class="btn btn-view-mobile" id="btnViewCartelMobile" title="Ver vista previa del cartel">
+        <!-- Acciones Modo por Lote -->
+        <div class="footer-actions-group hidden" id="batchFooterActions">
+          <button type="button" class="btn btn-secondary" id="btnBatchPrint" title="Imprimir todos los carteles del lote juntos" aria-label="Imprimir todos los carteles del lote">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"></polyline>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+              <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            <span>Imprimir Todo</span>
+          </button>
+
+          <button type="button" class="btn btn-primary" id="btnBatchDownloadPdf" title="Descargar un único PDF multipágina con todos los carteles del lote" aria-label="Descargar PDF multipágina con todos los carteles del lote">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Descargar PDF Lote</span>
+          </button>
+        </div>
+
+        <button type="button" class="btn btn-view-mobile" id="btnViewCartelMobile" title="Ver vista previa del cartel" aria-label="Ver vista previa del cartel">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
             <circle cx="12" cy="12" r="3"></circle>
@@ -369,7 +536,7 @@
       <!-- Barra superior de control de visualización -->
       <div class="preview-toolbar">
         <div class="toolbar-left">
-          <button type="button" class="btn-back-mobile" id="btnBackEditorMobile" title="Volver al formulario de edición">
+          <button type="button" class="btn-back-mobile" id="btnBackEditorMobile" title="Volver al formulario de edición" aria-label="Volver al formulario de edición">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
@@ -377,18 +544,36 @@
           </button>
           <div class="status-indicator">
             <span class="status-dot"></span>
-            <span>Vista Previa en Vivo</span>
+            <span id="previewStatusLabel">Vista Previa en Vivo</span>
           </div>
         </div>
 
         <div class="toolbar-right">
           <div class="zoom-controls">
-            <button class="zoom-btn" id="btnZoomOut" title="Reducir zoom">−</button>
+            <button class="zoom-btn" id="btnZoomOut" title="Reducir zoom" aria-label="Reducir zoom">−</button>
             <span class="zoom-level" id="zoomLevelText">75%</span>
-            <button class="zoom-btn" id="btnZoomIn" title="Aumentar zoom">+</button>
-            <button class="zoom-btn" id="btnZoomFit" title="Ajustar al ancho de pantalla" style="font-size: 11px; padding: 0 5px;">Ajustar</button>
-            <button class="zoom-btn" id="btnZoomReset" title="Restablecer zoom" style="font-size: 11px; padding: 0 4px;">100%</button>
+            <button class="zoom-btn" id="btnZoomIn" title="Aumentar zoom" aria-label="Aumentar zoom">+</button>
+            <button class="zoom-btn" id="btnZoomFit" title="Ajustar al ancho de pantalla" aria-label="Ajustar al ancho de pantalla" style="font-size: 11px; padding: 0 5px;">Ajustar</button>
+            <button class="zoom-btn" id="btnZoomReset" title="Restablecer zoom" aria-label="Restablecer zoom al 100%" style="font-size: 11px; padding: 0 4px;">100%</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Barra de pestañas para navegar entre carteles del lote -->
+      <div class="batch-preview-bar hidden" id="batchPreviewBar">
+        <div class="batch-preview-tabs-scroll" id="batchTabsList">
+          <!-- Pestañas generadas dinámicamente -->
+        </div>
+        <div class="batch-view-actions">
+          <button type="button" class="btn-batch-view-toggle" id="btnToggleBatchView" title="Alternar entre ver un cartel o mosaico de todos" aria-label="Alternar entre ver un cartel o mosaico de todos">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span id="btnToggleBatchViewText">Ver Mosaico</span>
+          </button>
         </div>
       </div>
 
@@ -401,7 +586,7 @@
 
       <!-- Barra de acciones rápidas para móvil (Imprimir y Descargar directo en preview) -->
       <div class="mobile-preview-actions" id="mobilePreviewActions">
-        <button type="button" class="btn btn-secondary btn-mobile-action" id="btnPrintMobile" title="Imprimir directo o guardar como PDF">
+        <button type="button" class="btn btn-secondary btn-mobile-action" id="btnPrintMobile" title="Imprimir directo o guardar como PDF" aria-label="Imprimir directo o guardar como PDF">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="6 9 6 2 18 2 18 9"></polyline>
             <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -410,7 +595,7 @@
           <span>Imprimir</span>
         </button>
 
-        <button type="button" class="btn btn-primary btn-mobile-action" id="btnDownloadPdfMobile" title="Descargar PDF en alta resolución">
+        <button type="button" class="btn btn-primary btn-mobile-action" id="btnDownloadPdfMobile" title="Descargar PDF en alta resolución" aria-label="Descargar PDF en alta resolución">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
@@ -431,20 +616,19 @@
     </main>
   </div>
 
-  <!-- Librerías de soporte -->
-  <script src="src/lib/qrcode.min.js"></script>
-  <script src="src/lib/html2canvas.min.js"></script>
-  <script src="src/lib/jspdf.umd.min.js"></script>
+  <!-- Librería de generación de código QR (ligera: 19 KiB) -->
+  <script defer src="src/lib/qrcode.min.js"></script>
 
-  <!-- Módulos de la aplicación por responsabilidad -->
-  <script src="src/js/assets.js?v=20261012_martes"></script>
-  <script src="src/js/utils.js?v=20261012_martes"></script>
-  <script src="src/js/state.js?v=20261012_martes"></script>
-  <script src="src/js/calculator.js?v=20261012_martes"></script>
-  <script src="src/js/templates.js?v=20261012_martes"></script>
-  <script src="src/js/qr.js?v=20261012_martes"></script>
-  <script src="src/js/export.js?v=20261012_martes"></script>
-  <script src="src/js/categorias.js?v=20261013_autocomplete"></script>
-  <script src="src/js/app.js?v=20261012_martes"></script>
+  <!-- Módulos de la aplicación por responsabilidad con carga no bloqueante (defer) -->
+  <script defer src="src/js/assets.js?v=20261020_17"></script>
+  <script defer src="src/js/utils.js?v=20261020_17"></script>
+  <script defer src="src/js/state.js?v=20261020_17"></script>
+  <script defer src="src/js/calculator.js?v=20261020_17"></script>
+  <script defer src="src/js/templates.js?v=20261020_17"></script>
+  <script defer src="src/js/qr.js?v=20261020_17"></script>
+  <script defer src="src/js/export.js?v=20261020_17"></script>
+  <script defer src="src/js/categorias.js?v=20261020_17"></script>
+  <script defer src="src/js/batch.js?v=20261020_17"></script>
+  <script defer src="src/js/app.js?v=20261020_17"></script>
 </body>
 </html>

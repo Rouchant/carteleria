@@ -4,6 +4,7 @@
 
 // Generador de QR dinámico hacia falabella.com/falabella-cl/product/{sku}/
 function generateQRCode(containerEl, sku) {
+  if (!containerEl) return;
   containerEl.innerHTML = '';
   const cleanSku = (sku || '').trim() || '80835902';
   const targetUrl = `https://www.falabella.com/falabella-cl/product/${cleanSku}/`;
@@ -18,10 +19,31 @@ function generateQRCode(containerEl, sku) {
       correctLevel: QRCode.CorrectLevel.M
     });
 
-    // Ocultar canvas explícitamente por si el navegador ignora inline styles
+    // CONVERSIÓN SÍNCRONA INMEDIATA:
+    // QRCode.js dibuja en el canvas de forma síncrona. Convertimos inmediatamente a dataURL
+    // y asignamos a un <img> para que esté disponible instantáneamente al imprimir o exportar
+    // sin depender de callbacks asíncronos retardados.
     const canvas = containerEl.querySelector('canvas');
     if (canvas) {
-      canvas.style.display = 'none';
+      try {
+        const dataUrl = canvas.toDataURL('image/png');
+        let img = containerEl.querySelector('img');
+        if (!img) {
+          img = document.createElement('img');
+          containerEl.appendChild(img);
+        }
+        img.src = dataUrl;
+        img.style.display = 'block';
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain';
+        img.alt = `Código QR Falabella SKU ${cleanSku}`;
+        canvas.style.display = 'none';
+      } catch (e) {
+        canvas.style.display = 'block';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+      }
     }
   } else {
     // Fallback visual si la librería aún no ha cargado
