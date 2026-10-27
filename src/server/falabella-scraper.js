@@ -102,7 +102,44 @@ function extractCategoryFromProduct(product, marca, nombre) {
   const specs = product.attributes?.specifications || [];
   const topSpecs = product.attributes?.topSpecifications || [];
 
-  // 1. Mapeo prioritario de Línea Blanca / Electrohogar y Periféricos por título comercial oficial
+  // 1. PRIORIDAD MÁXIMA: Especificación 'Tipo' explícita válida (ej. 'Notebook', 'Notebook Gamer', 'Parlante Bluetooth')
+  const exactTipo = specs.find(s => s.name && s.name.trim().toLowerCase() === 'tipo' && !/pantalla|carga|gpu|bateria/i.test(s.name));
+  if (exactTipo && exactTipo.value && !/indicadores|led|superior|frontal/i.test(exactTipo.value)) {
+    const val = exactTipo.value.trim();
+    if (!/^otros?\s*accesorios?$/i.test(val)) {
+      if (/^notebook$/i.test(val)) return 'Notebooks';
+      return val;
+    }
+  }
+
+  // 2. Especificación técnica de ID Falabella (_tipo_de_*)
+  const idTipo = specs.find(s => s.id && /_tipo_de_(portatil|auricular|altavoz|parlante|computador)/i.test(s.id));
+  if (idTipo && idTipo.value) {
+    const val = idTipo.value.trim();
+    if (!/^otros?\s*accesorios?$/i.test(val)) {
+      if (/^notebook$/i.test(val)) return 'Notebooks';
+      return val;
+    }
+  }
+
+  if (specs.some(s => s.id && /_tipo_de_mouse/i.test(s.id))) {
+    return 'Mouse';
+  }
+
+  // 3. Nombres alternativos por departamento y topSpecifications
+  const nameTipo = specs.find(s => /^(auricular|tipo de producto|tipo de auricular|tipo de altavoz)/i.test(s.name || ''));
+  if (nameTipo && nameTipo.value && !/^otros?\s*accesorios?$/i.test(nameTipo.value.trim())) return nameTipo.value.trim();
+
+  const topTipo = topSpecs.find(s => /^(tipo|auricular)/i.test(s.name || '') && !/carga|pantalla/i.test(s.name));
+  if (topTipo && topTipo.value && !/superior|frontal|led/i.test(topTipo.value)) {
+    const val = topTipo.value.trim();
+    if (!/^otros?\s*accesorios?$/i.test(val)) {
+      if (/^notebook$/i.test(val)) return 'Notebooks';
+      return val;
+    }
+  }
+
+  // 4. Mapeo de Línea Blanca / Electrohogar y Periféricos por título comercial oficial si no vino en 'Tipo'
   const priorityKeywords = [
     // Periféricos y accesorios de computación
     { regex: /^mouse\s*pad/i, cat: 'Mousepad' },
@@ -111,7 +148,7 @@ function extractCategoryFromProduct(product, marca, nombre) {
     { regex: /^monitor\s*(?:gamer)?/i, cat: (m) => /gamer/i.test(m[0]) ? 'Monitor Gamer' : 'Monitores' },
     { regex: /^impresora|multifuncional/i, cat: 'Impresoras' },
     { regex: /^webcam|c[áa]mara\s*web/i, cat: 'Cámaras Web' },
-    { regex: /^disco\s*(?:duro|externo|solido|s[oó]lido)|ssd/i, cat: 'Almacenamiento' },
+    { regex: /^(?:disco\s*(?:duro|externo|solido|s[oó]lido)|ssd)\b/i, cat: 'Almacenamiento' },
     { regex: /^pendrive|memoria\s*usb/i, cat: 'Pendrives' },
     { regex: /^tarjeta\s*de\s*memoria|micro\s*sd/i, cat: 'Tarjetas de Memoria' },
     { regex: /^router|repetidor|switch/i, cat: 'Conectividad y Redes' },
@@ -152,27 +189,6 @@ function extractCategoryFromProduct(product, marca, nombre) {
     }
   }
 
-  // 2. Especificación 'Tipo' explícita válida (ej: 'Notebook Gamer', 'Parlante Bluetooth')
-  const exactTipo = specs.find(s => s.name && s.name.trim().toLowerCase() === 'tipo' && !/pantalla|carga|gpu|bateria/i.test(s.name));
-  if (exactTipo && exactTipo.value && !/indicadores|led|superior|frontal/i.test(exactTipo.value)) {
-    return exactTipo.value.trim();
-  }
-
-  // 3. Especificación técnica de ID Falabella (audífonos, portátiles, altavoces, mouse)
-  const idTipo = specs.find(s => s.id && /_tipo_de_(portatil|auricular|altavoz|parlante|computador)/i.test(s.id));
-  if (idTipo && idTipo.value) return idTipo.value.trim();
-
-  if (specs.some(s => s.id && /_tipo_de_mouse/i.test(s.id))) {
-    return 'Mouse';
-  }
-
-  // 4. Nombres alternativos por departamento
-  const nameTipo = specs.find(s => /^(auricular|tipo de producto|tipo de auricular|tipo de altavoz)/i.test(s.name || ''));
-  if (nameTipo && nameTipo.value) return nameTipo.value.trim();
-
-  const topTipo = topSpecs.find(s => /^(tipo|auricular)/i.test(s.name || '') && !/carga|pantalla/i.test(s.name));
-  if (topTipo && topTipo.value && !/superior|frontal|led/i.test(topTipo.value)) return topTipo.value.trim();
-
   // 5. Patrones adicionales de tecnología y audio en el título comercial
   const techPatterns = [
     { regex: /^(aud[íi]fonos?\s*(?:in-ear|over-ear|on-ear|true wireless|gamer|bluetooth)?)/i, cat: (m) => m[1].replace(/\b\w/g, c => c.toUpperCase()) },
@@ -189,10 +205,15 @@ function extractCategoryFromProduct(product, marca, nombre) {
     if (m) return tp.cat(m);
   }
 
-  // 6. Taxonomía de categorías si existe
+  // 6. Taxonomía de categorías o breadCrumb de Falabella si existe
   if (product.categories && product.categories.length > 0) {
     const lastCat = product.categories[product.categories.length - 1];
     if (lastCat && lastCat.name) return lastCat.name.trim();
+  }
+  if (product.breadCrumb && product.breadCrumb.length > 0) {
+    const rootBread = product.breadCrumb.find(b => b.isRoot && b.label)?.label;
+    if (rootBread) return rootBread.trim();
+    if (product.breadCrumb[0]?.label) return product.breadCrumb[0].label.trim();
   }
 
   return 'General';
@@ -262,19 +283,38 @@ function parseProductData(product, targetSku) {
   let modelo = '';
 
   const modelSpec = specs.find(s => /^(modelo|nombre comercial)/i.test(s.name || ''));
-  if (modelSpec && modelSpec.value) {
-    modelo = modelSpec.value;
-  } else if (product.model) {
-    modelo = product.model;
-  }
+  const isMarketingText = (s) => !s || typeof s !== 'string' || s.length > 40 || s.includes('\n') || s.split(' ').length > 6 || /^[A-ZÁÉÍÓÚ\s,]{12,}/.test(s);
 
-  // Deducción inteligente de modelo a partir del nombre comercial si no viene explícito
-  if (!modelo && nombre) {
+  // Deducción inteligente de modelo
+  const isConsumable = /botella\s*de\s*tinta|cartucho|tinta\s*negra|tinta\s*color/i.test(nombre);
+
+  if (isConsumable && nombre) {
     let cleanTitle = nombre;
-    if (marca && cleanTitle.toUpperCase().startsWith(marca)) {
-      cleanTitle = cleanTitle.substring(marca.length).trim();
+    if (marca) {
+      const rxMarca = new RegExp('\\b' + marca + '\\b', 'gi');
+      cleanTitle = cleanTitle.replace(rxMarca, '').replace(/\s{2,}/g, ' ').trim();
     }
-    modelo = cleanTitle.split(' ').slice(0, 4).join(' ');
+    modelo = cleanTitle;
+  } else {
+    if (modelSpec && modelSpec.value && !isMarketingText(modelSpec.value.trim())) {
+      modelo = modelSpec.value.trim();
+    } else if (product.model && !isMarketingText(String(product.model).trim())) {
+      modelo = String(product.model).trim();
+    }
+
+    if (!modelo && nombre) {
+      let cleanTitle = nombre;
+      if (marca && cleanTitle.toUpperCase().startsWith(marca)) {
+        cleanTitle = cleanTitle.substring(marca.length).trim();
+      }
+      // Si contiene comas separando especificaciones (ej: "Monitor Gaming OMEN 27”, Full HD, IPS...")
+      const commaParts = cleanTitle.split(',');
+      if (commaParts.length > 1 && commaParts[0].trim().split(' ').length >= 2) {
+        modelo = commaParts[0].trim();
+      } else {
+        modelo = cleanTitle.split(' ').slice(0, 4).join(' ');
+      }
+    }
   }
 
   return {
