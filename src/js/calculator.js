@@ -5,7 +5,8 @@
 // Monto mínimo oficial Falabella para simulación de 12 cuotas CMR
 const MONTO_MINIMO_CUOTAS = 60000;
 
-// Umbral de tramo CMF (> 50 UF aprox. $2.000.000 CLP) donde aplica factor de tramo superior
+// Umbrales de tramos CMF / Retail Falabella para simulación de 12 cuotas
+const UMBRAL_TRAMO_BAJO_CLP = 600000;
 const UMBRAL_TRAMO_ALTO_CLP = 2000000;
 
 // Motor de cálculo financiero para 12 cuotas con tarjeta CMR y CAE
@@ -22,12 +23,11 @@ function calcularFinanciamiento(monto, caePorcentaje) {
     ? 1
     : (Math.pow(1 + cae / 100, 1 / 12) - 1) / (Math.pow(1 + 0.3993, 1 / 12) - 1);
 
-  // En tramos sobre $2.000.000 (> 50 UF), el motor de flejes de tienda aplica factor de tramo alto:
+  // 1. Tramo Alto (> $2.000.000 CLP / > 50 UF):
   // Calibrado con fleje real tienda SKU 80835900: $2.999.990 -> 12 cuotas de $301.995 / CTC $3.647.858
   if (monto > UMBRAL_TRAMO_ALTO_CLP) {
     const factorCuotaAlto = 301995 / 2999990; // ~0.1006653356
     const cuotaFinal = Math.round(monto * factorCuotaAlto * factorAjuste);
-    // En tramo alto el Impuesto de Timbres y Estampillas (0.66% sobre el total de cuotas)
     const impuestoTE = Math.round(cuotaFinal * 12 * 0.0066);
     const ctcTotal = (cuotaFinal * 12) + impuestoTE;
     return {
@@ -36,13 +36,26 @@ function calcularFinanciamiento(monto, caePorcentaje) {
     };
   }
 
-  // Factor oficial retail Falabella para tramo estándar <= $2.000.000 (calibrado a CAE 39.93%)
-  // Coincide al peso exacto en todos los flejes de tienda:
-  // $589.990   -> 12 cuotas de $59.762  / CTC $721.817
-  // $639.990   -> 12 cuotas de $64.826  / CTC $782.981
-  // $1.219.990 -> 12 cuotas de $123.576 / CTC $1.492.574
-  // $1.499.990 -> 12 cuotas de $151.938 / CTC $1.835.136
   const factorCuotaBase = 151938 / 1499990; // ~0.101292675
+
+  // 2. Tramo Bajo ($60.001 a $599.999 CLP):
+  // Calibrado con fleje real tienda SKU 80709744: $569.990 -> 12 cuotas de $59.762 / CTC $721.817
+  if (monto < UMBRAL_TRAMO_BAJO_CLP) {
+    const montoBaseTramo = monto + 20000;
+    const cuotaFinal = Math.round(montoBaseTramo * factorCuotaBase * factorAjuste);
+    const impuestoTE = Math.round(montoBaseTramo * 0.00792);
+    const ctcTotal = (cuotaFinal * 12) + impuestoTE;
+    return {
+      cuota: cuotaFinal,
+      ctc: ctcTotal
+    };
+  }
+
+  // 3. Tramo Medio Estándar ($600.000 a $2.000.000 CLP):
+  // Coincide al peso exacto en los flejes de tienda:
+  // $639.990   -> 12 cuotas de $64.826  / CTC $782.981
+  // $1.219.990 -> 12 cuotas de $123.576 / CTC $1.492.574 (SKU 80739039)
+  // $1.499.990 -> 12 cuotas de $151.938 / CTC $1.835.136
   const cuotaFinal = Math.round(monto * factorCuotaBase * factorAjuste);
 
   // CTC oficial en Chile (Normativa CMF / SERNAC y D.L. 3475):

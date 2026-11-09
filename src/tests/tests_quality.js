@@ -237,11 +237,13 @@ test('getSemanaVigenteActual: Al cambiar a Martes 13 arranca nuevo ciclo hasta L
 currentCategory = 'unitCalculator';
 console.log(`\n${C.bold}${C.yellow}--- [2] Pruebas Unitarias: Cálculos Financieros CMR (calculator.js) ---${C.reset}`);
 
-test('calcularFinanciamiento genera cuota y CTC oficiales para monto retail (tramo estándar y tramo alto > 50 UF)', () => {
-  const fin0 = ctx.calcularFinanciamiento(589990, 39.93);
-  expect(fin0.cuota).toBe(59762);
-  expect(fin0.ctc).toBe(721817);
+test('calcularFinanciamiento genera cuota y CTC oficiales para los 3 tramos de flejes retail', () => {
+  // Tramo bajo (< $600.000): SKU 80709744 ($569.990 -> $59.762 / CTC $721.817)
+  const finBajo = ctx.calcularFinanciamiento(569990, 39.93);
+  expect(finBajo.cuota).toBe(59762);
+  expect(finBajo.ctc).toBe(721817);
 
+  // Tramo medio ($600.000 a $2.000.000): $639.990, $1.219.990 (SKU 80739039) y $1.499.990
   const fin1 = ctx.calcularFinanciamiento(639990, 39.93);
   expect(fin1.cuota).toBe(64826);
   expect(fin1.ctc).toBe(782981);
@@ -254,6 +256,7 @@ test('calcularFinanciamiento genera cuota y CTC oficiales para monto retail (tra
   expect(fin2.cuota).toBe(151938);
   expect(fin2.ctc).toBe(1835136);
 
+  // Tramo alto (> $2.000.000): SKU 80835900 ($2.999.990 -> $301.995 / CTC $3.647.858)
   const finAlto = ctx.calcularFinanciamiento(2999990, 39.93);
   expect(finAlto.cuota).toBe(301995);
   expect(finAlto.ctc).toBe(3647858);
@@ -389,6 +392,52 @@ test('Productos < $60.000 no muestran bloque de cuotas en ningún modo comercial
   ctx.render9x7(sheet9x7, sinCuotasCtx);
   expect(sheet9x7.innerHTML).notToContain('cuotas-cmr-row');
   expect(sheet9x7.innerHTML).notToContain('CUOTAS DE $0');
+});
+
+test('Todos los carteles con financiamiento muestran estrictamente simulación en 12 CUOTAS', () => {
+  const sheetP118 = new MockElement('div');
+  ctx.renderVerticalTemplate(sheetP118, 'p118', baseCtxMock);
+  expect(sheetP118.innerHTML).toContain('12 CUOTAS DE $64.826');
+
+  const sheet15x21 = new MockElement('div');
+  ctx.render15x21(sheet15x21, baseCtxMock);
+  expect(sheet15x21.innerHTML).toContain('12 CUOTAS DE $64.826');
+
+  const sheet9x13 = new MockElement('div');
+  ctx.render9x13(sheet9x13, baseCtxMock);
+  expect(sheet9x13.innerHTML).toContain('12 CUOTAS DE $64.826');
+
+  const sheet9x7 = new MockElement('div');
+  ctx.render9x7(sheet9x7, baseCtxMock);
+  expect(sheet9x7.innerHTML).toContain('12 CUOTAS DE $64.826');
+});
+
+test('extractCategoryFromProduct prioriza Tipo explícito y soporta tolerancia de 1-2 letras en título', () => {
+  const prodTipo = {
+    displayName: 'ASUS TUF Gaming A15',
+    brandName: 'ASUS',
+    attributes: {
+      specifications: [{ name: 'Tipo', value: 'Notebook Gamer' }]
+    }
+  };
+  expect(ctx.extractCategoryFromProduct(prodTipo, 'ASUS', prodTipo.displayName)).toBe('Notebook Gamer');
+
+  const prodAfeitadora = {
+    displayName: 'Afeitadora Philips Qp2724/10 Oneblade',
+    brandName: 'PHILIPS',
+    attributes: {
+      topSpecifications: [{ name: 'Tipo de afeitado', value: 'Húmedo,Seco' }],
+      specifications: [{ name: 'Tipo de afeitado', value: 'Húmedo,Seco' }]
+    }
+  };
+  expect(ctx.extractCategoryFromProduct(prodAfeitadora, 'PHILIPS', prodAfeitadora.displayName)).toBe('Maquina de afeitar');
+
+  const prodTypo = {
+    displayName: 'Afeitdora Philips Qp2724/10 Oneblade',
+    brandName: 'PHILIPS',
+    attributes: { specifications: [] }
+  };
+  expect(ctx.extractCategoryFromProduct(prodTypo, 'PHILIPS', prodTypo.displayName)).toBe('Maquina de afeitar');
 });
 
 test('extractBatchSkus procesa SKUs separados por espacios, comas y saltos de línea', () => {
