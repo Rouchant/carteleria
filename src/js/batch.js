@@ -80,46 +80,54 @@ function extractCategoryFromProduct(product, marca, nombre) {
 
   const specs = product.attributes?.specifications || [];
   const topSpecs = product.attributes?.topSpecifications || [];
+  const allSpecs = [...specs, ...topSpecs];
 
-  // 1. PRIORIDAD MÁXIMA: Especificación 'Tipo' explícita válida (ej. 'Notebook', 'Notebook Gamer', 'Parlante Bluetooth')
-  const exactTipo = specs.find(s => s.name && s.name.trim().toLowerCase() === 'tipo' && !/pantalla|carga|gpu|bateria/i.test(s.name));
-  if (exactTipo && exactTipo.value && !/indicadores|led|superior|frontal/i.test(exactTipo.value)) {
+  const isInvalidCategoryValue = (val) => {
+    if (!val || typeof val !== 'string') return true;
+    const v = val.trim();
+    if (v.length < 2 || v.length > 45) return true;
+    return /^(otros?\s*accesorios?|otros?|no\s*aplica|n\/a|sin\s*informaci[oó]n|est[aá]ndard?|normal|general|indicadores.*|led|superior|frontal|h[uú]medo.*|seco.*|autom[aá]tica|manual|inal[aá]mbric[oa]|al[aá]mbric[oa]|port[aá]til|fijo|interior|exterior|dom[eé]stic[oa]|casa|hogar|oficina|s[ií]|no)$/i.test(v);
+  };
+
+  // 1. PRIORIDAD MÁXIMA: Especificación 'Tipo' explícita de la ficha técnica (ej. 'Tipo: Notebook Gamer', 'Tipo: Parlante Bluetooth')
+  // Se exige coincidencia exacta en el nombre del atributo para evitar falsos positivos como 'Tipo de afeitado' o 'Tipo de pantalla'
+  const exactTipo = allSpecs.find(s => s.name && /^(tipo|tipo de producto|tipo de art[ií]culo|tipo de equipo)$/i.test(s.name.trim()));
+  if (exactTipo && exactTipo.value && !isInvalidCategoryValue(exactTipo.value)) {
     const val = exactTipo.value.trim();
-    if (!/^otros?\s*accesorios?$/i.test(val)) {
-      if (/^notebook$/i.test(val)) return 'Notebooks';
-      return val;
-    }
+    if (/^notebook$/i.test(val)) return 'Notebooks';
+    return val;
   }
 
   // 2. Especificación técnica de ID Falabella (_tipo_de_*)
-  const idTipo = specs.find(s => s.id && /_tipo_de_(portatil|auricular|altavoz|parlante|computador)/i.test(s.id));
-  if (idTipo && idTipo.value) {
+  const idTipo = allSpecs.find(s => s.id && /_tipo_de_(portatil|auricular|altavoz|parlante|computador)/i.test(s.id));
+  if (idTipo && idTipo.value && !isInvalidCategoryValue(idTipo.value)) {
     const val = idTipo.value.trim();
-    if (!/^otros?\s*accesorios?$/i.test(val)) {
-      if (/^notebook$/i.test(val)) return 'Notebooks';
-      return val;
-    }
+    if (/^notebook$/i.test(val)) return 'Notebooks';
+    return val;
   }
 
-  if (specs.some(s => s.id && /_tipo_de_mouse/i.test(s.id))) {
+  if (allSpecs.some(s => s.id && /_tipo_de_mouse/i.test(s.id))) {
     return 'Mouse';
   }
 
-  // 3. Nombres alternativos por departamento y topSpecifications
-  const nameTipo = specs.find(s => /^(auricular|tipo de producto|tipo de auricular|tipo de altavoz)/i.test(s.name || ''));
-  if (nameTipo && nameTipo.value && !/^otros?\s*accesorios?$/i.test(nameTipo.value.trim())) return nameTipo.value.trim();
-
-  const topTipo = topSpecs.find(s => /^(tipo|auricular)/i.test(s.name || '') && !/carga|pantalla/i.test(s.name));
-  if (topTipo && topTipo.value && !/superior|frontal|led/i.test(topTipo.value)) {
-    const val = topTipo.value.trim();
-    if (!/^otros?\s*accesorios?$/i.test(val)) {
-      if (/^notebook$/i.test(val)) return 'Notebooks';
-      return val;
-    }
+  // 3. Nombres alternativos específicos de categoría por departamento (exactos)
+  const nameTipo = allSpecs.find(s => /^(auricular|tipo de auricular|tipo de altavoz|tipo de parlante)$/i.test((s.name || '').trim()));
+  if (nameTipo && nameTipo.value && !isInvalidCategoryValue(nameTipo.value)) {
+    const val = nameTipo.value.trim();
+    if (/^notebook$/i.test(val)) return 'Notebooks';
+    return val;
   }
 
-  // 4. Mapeo de Línea Blanca / Electrohogar y Periféricos por título comercial oficial si no vino en 'Tipo'
+  // 4. Mapeo de Línea Blanca / Electrohogar, Cuidado Personal y Periféricos por título comercial oficial si no vino en 'Tipo'
   const priorityKeywords = [
+    // Cuidado personal
+    { regex: /\b(?:afeitadora|rasuradora|oneblade|maquina\s*de\s*afeitar)\b/i, cat: 'Maquina de afeitar' },
+    { regex: /\b(?:cortapelos?|trimmer)\b/i, cat: 'Afeitadoras y Cortapelos' },
+    { regex: /\bdepiladora\b/i, cat: 'Depiladoras' },
+    { regex: /\b(?:alisador(?:a)?|plancha\s*de\s*(?:pelo|cabello))\b/i, cat: 'Alisadores de pelo' },
+    { regex: /\bsecador\s*de\s*(?:pelo|cabello)\b/i, cat: 'Secadores de pelo' },
+    { regex: /\b(?:ondulador|rizador)\b/i, cat: 'Onduladores de pelo' },
+
     // Periféricos y accesorios de computación
     { regex: /^mouse\s*pad/i, cat: 'Mousepad' },
     { regex: /^mouse\s*(?:gamer)?/i, cat: (m) => /gamer/i.test(m[0]) ? 'Mouse Gamer' : 'Mouse' },
@@ -173,7 +181,8 @@ function extractCategoryFromProduct(product, marca, nombre) {
     { regex: /^(aud[íi]fonos?\s*(?:in-ear|over-ear|on-ear|true wireless|gamer|bluetooth)?)/i, cat: (m) => m[1].replace(/\b\w/g, c => c.toUpperCase()) },
     { regex: /^(parlante\s*(?:bluetooth|port[áa]til|torre)?)/i, cat: (m) => m[1].replace(/\b\w/g, c => c.toUpperCase()) },
     { regex: /^(smart\s*tv|televisor)/i, cat: () => 'Smart TV' },
-    { regex: /^(notebook\s*(?:gamer)?|laptop)/i, cat: () => 'Notebooks' },
+    { regex: /^(notebook\s*gamer)/i, cat: () => 'Notebook Gamer' },
+    { regex: /^(notebook|laptop)/i, cat: () => 'Notebooks' },
     { regex: /^(smartphone|celular|tel[ée]fono)/i, cat: () => 'Smartphones' },
     { regex: /^(tablet|ipad)/i, cat: () => 'Tablets' },
     { regex: /^(smartwatch|reloj inteligente)/i, cat: () => 'Smartwatches' }
@@ -184,7 +193,14 @@ function extractCategoryFromProduct(product, marca, nombre) {
     if (m) return tp.cat(m);
   }
 
-  // 6. Taxonomía de categorías o breadCrumb de Falabella si existe
+  // 6. Búsqueda inteligente de palabras clave del título en el catálogo oficial de Categorías con tolerancia de 1-2 letras (Levenshtein)
+  const catMgr = (typeof window !== 'undefined' && window.CategoriasManager) || (typeof CategoriasManager !== 'undefined' ? CategoriasManager : null);
+  if (catMgr && typeof catMgr.findBestCategoryFromTitle === 'function') {
+    const fuzzyMatch = catMgr.findBestCategoryFromTitle(nombre || title, marca);
+    if (fuzzyMatch) return fuzzyMatch;
+  }
+
+  // 7. Taxonomía de categorías o breadCrumb de Falabella si existe
   if (product.categories && product.categories.length > 0) {
     const lastCat = product.categories[product.categories.length - 1];
     if (lastCat && lastCat.name) return lastCat.name.trim();
@@ -299,6 +315,16 @@ function normalizarProducto(d, cleanSku) {
     }
   }
 
+  // Detección preventiva de parámetros de financiamiento (CAE / cuotas / CTC) si Falabella los expone en API
+  const calcCfg = variant.calculatorConfig || d.calculatorConfig || variant.installments || d.installments || {};
+  let caeExtraido = null;
+  if (calcCfg && (calcCfg.cae || calcCfg.caePercentage)) {
+    const parsedCae = parseFloat(String(calcCfg.cae || calcCfg.caePercentage).replace(',', '.'));
+    if (!isNaN(parsedCae) && parsedCae > 0 && parsedCae < 150) {
+      caeExtraido = parsedCae;
+    }
+  }
+
   return {
     sku: String(cleanSku).trim(),
     marca: marca || 'MARCA',
@@ -313,6 +339,7 @@ function normalizarProducto(d, cleanSku) {
     precioNormalNum: normalPriceNum,
     tipoPrecio: tipoPrecio,
     vigenciaHasta: fechaVigencia,
+    cae: caeExtraido,
     url: `https://www.falabella.com/falabella-cl/product/${cleanSku}/`
   };
 }
@@ -398,6 +425,9 @@ function aplicarProducto(d, isSingleManual = false) {
     if (d.vigenciaHasta) {
       state.vigenciaHasta = d.vigenciaHasta;
       state.fechasPersonalizadas = true;
+    }
+    if (d.cae && !isNaN(parseFloat(d.cae))) {
+      state.cae = parseFloat(d.cae);
     }
 
     // Auto-activar preset según la clasificación comercial

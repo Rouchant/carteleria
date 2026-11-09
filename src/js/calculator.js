@@ -5,6 +5,9 @@
 // Monto mínimo oficial Falabella para simulación de 12 cuotas CMR
 const MONTO_MINIMO_CUOTAS = 60000;
 
+// Umbral de tramo CMF (> 50 UF aprox. $2.000.000 CLP) donde aplica factor de tramo superior
+const UMBRAL_TRAMO_ALTO_CLP = 2000000;
+
 // Motor de cálculo financiero para 12 cuotas con tarjeta CMR y CAE
 function calcularFinanciamiento(monto, caePorcentaje) {
   // En retail Falabella, la simulación de 12 cuotas aplica SOLAMENTE sobre los $60.000
@@ -14,17 +17,32 @@ function calcularFinanciamiento(monto, caePorcentaje) {
 
   const cae = parseFloat(caePorcentaje) || 39.93;
 
-  // Factor oficial retail Falabella para 12 cuotas (calibrado a CAE 39.93%)
-  // Coincide al peso exacto en ambos ejemplos oficiales:
-  // $639.990 -> 12 cuotas de $64.826 / CTC $782.981
-  // $1.499.990 -> 12 cuotas de $151.938 / CTC $1.835.136
-  const factorCuotaBase = 151938 / 1499990; // ~0.101292675
-
-  // Ajuste según CAE si es diferente de 39.93%
+  // Ajuste proporcional si el usuario modifica manualmente el CAE respecto al 39.93% base
   const factorAjuste = (Math.abs(cae - 39.93) < 0.01)
     ? 1
     : (Math.pow(1 + cae / 100, 1 / 12) - 1) / (Math.pow(1 + 0.3993, 1 / 12) - 1);
 
+  // En tramos sobre $2.000.000 (> 50 UF), el motor de flejes de tienda aplica factor de tramo alto:
+  // Calibrado con fleje real tienda SKU 80835900: $2.999.990 -> 12 cuotas de $301.995 / CTC $3.647.858
+  if (monto > UMBRAL_TRAMO_ALTO_CLP) {
+    const factorCuotaAlto = 301995 / 2999990; // ~0.1006653356
+    const cuotaFinal = Math.round(monto * factorCuotaAlto * factorAjuste);
+    // En tramo alto el Impuesto de Timbres y Estampillas (0.66% sobre el total de cuotas)
+    const impuestoTE = Math.round(cuotaFinal * 12 * 0.0066);
+    const ctcTotal = (cuotaFinal * 12) + impuestoTE;
+    return {
+      cuota: cuotaFinal,
+      ctc: ctcTotal
+    };
+  }
+
+  // Factor oficial retail Falabella para tramo estándar <= $2.000.000 (calibrado a CAE 39.93%)
+  // Coincide al peso exacto en todos los flejes de tienda:
+  // $589.990   -> 12 cuotas de $59.762  / CTC $721.817
+  // $639.990   -> 12 cuotas de $64.826  / CTC $782.981
+  // $1.219.990 -> 12 cuotas de $123.576 / CTC $1.492.574
+  // $1.499.990 -> 12 cuotas de $151.938 / CTC $1.835.136
+  const factorCuotaBase = 151938 / 1499990; // ~0.101292675
   const cuotaFinal = Math.round(monto * factorCuotaBase * factorAjuste);
 
   // CTC oficial en Chile (Normativa CMF / SERNAC y D.L. 3475):

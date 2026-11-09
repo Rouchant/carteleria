@@ -113,7 +113,7 @@ function renderVerticalTemplate(sheet, tplCode, ctx) {
       <div class="price-cmr-block">
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
         ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
-        <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+        <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         ` : ''}
       </div>
@@ -237,7 +237,7 @@ function renderFichaP121(sheet, ctx) {
         ${ICONS.cmrComboBadge}
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
         ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
-        <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+        <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         ` : ''}
       ` : ''}
@@ -303,7 +303,7 @@ function render15x21(sheet, ctx) {
       <div class="price-cmr-block">
         <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
         ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
-        <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+        <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         ` : ''}
       </div>
@@ -394,7 +394,7 @@ function render9x13(sheet, ctx) {
       ${ICONS.cmrComboBadge}
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
       ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
-      <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+      <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
       <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
       ` : ''}
       ${ctx.hasOferta ? `
@@ -461,7 +461,7 @@ function render9x7(sheet, ctx) {
       <div class="cuotas-cmr-row">
         <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
-          <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+          <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
@@ -477,7 +477,7 @@ function render9x7(sheet, ctx) {
       <div class="cuotas-cmr-row">
         <img src="${ASSET_PATHS.cmr}" alt="CMR" class="cmr-mini-card" width="409" height="644">
         <div class="cuotas-texts">
-          <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+          <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
           <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
         </div>
       </div>
@@ -505,7 +505,7 @@ function render9x7(sheet, ctx) {
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
       ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-block">
-        <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+        <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
       </div>
       ` : ''}
@@ -538,7 +538,7 @@ function render9x7(sheet, ctx) {
       <div class="price-cmr-value">${formatCLP(state.precioCmr)}</div>
       ${ctx.financiamiento && ctx.financiamiento.cuota > 0 ? `
       <div class="cuotas-cmr-block">
-        <div class="cuotas-line-1">${state.cuotasNum} CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
+        <div class="cuotas-line-1">12 CUOTAS DE ${formatCLP(ctx.financiamiento.cuota)}</div>
         <div class="cuotas-line-2">CAE: ${state.cae.toFixed(2)}% / CTC: ${formatCLP(ctx.financiamiento.ctc)}</div>
       </div>
       ` : ''}

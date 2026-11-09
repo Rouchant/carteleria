@@ -194,18 +194,57 @@ async function runTests() {
     };
     const r5 = parseProductData(pMouse, '80677657');
     assert.strictEqual(r5.categoria, 'Mouse');
+
+    // Caso 6: Afeitadora Philips OneBlade (SKU 16746420) - Descarta falso positivo "Tipo de afeitado: Húmedo,Seco"
+    const pAfeitadora = {
+      displayName: 'Afeitadora Philips Qp2724/10 Oneblade',
+      brandName: 'PHILIPS',
+      attributes: {
+        topSpecifications: [
+          { id: 'tipo_de_cuchilla_electrica', name: 'Tipo de cuchilla eléctrica', value: 'Acero inoxidable' },
+          { id: 'tipo_de_afeitado', name: 'Tipo de afeitado', value: 'Húmedo,Seco' }
+        ],
+        specifications: [
+          { id: 'tipo_de_afeitado', name: 'Tipo de afeitado', value: 'Húmedo,Seco' }
+        ]
+      }
+    };
+    const r6 = parseProductData(pAfeitadora, '16746420');
+    assert.strictEqual(r6.categoria, 'Maquina de afeitar');
+
+    // Caso 7: Tolerancia de 1 a 2 letras de error en palabras clave del título contra catálogo de categorías
+    const pTypo1 = {
+      displayName: 'Afeitdora Philips Qp2724/10 Oneblade', // 1 letra menos en Afeitadora
+      brandName: 'PHILIPS',
+      attributes: { specifications: [] }
+    };
+    assert.strictEqual(parseProductData(pTypo1, '16746420').categoria, 'Maquina de afeitar');
+
+    const pTypo2 = {
+      displayName: 'Cafetara Express Oster PrimaLatte', // 1-2 letras de error en Cafetera Express -> Cafeteras Espresso
+      brandName: 'OSTER',
+      attributes: { specifications: [] }
+    };
+    assert.strictEqual(parseProductData(pTypo2, '12345678').categoria, 'Cafeteras Espresso');
   });
 
-  // 7. Integración en vivo con Falabella (SKU 80758852 y soporte URL)
-  await asyncTest('Extracción real en vivo desde Falabella para URL o SKU 80758852', async () => {
+  // 7. Integración en vivo con Falabella (SKU 80758852 y SKU 16746420)
+  await asyncTest('Extracción real en vivo desde Falabella para URL o SKU 80758852 y 16746420', async () => {
     const data = await scrapeFalabellaProduct('https://www.falabella.com/falabella-cl/product/80758852/Notebook-Gamer');
     assert.strictEqual(data.sku, '80758852');
     assert.strictEqual(data.marca, 'ASUS');
-    assert.ok(data.nombre.includes('TUF Gaming'), `Nombre debe incluir TUF Gaming, recibido: ${data.nombre}`);
+    assert.strictEqual(data.categoria, 'Notebook Gamer');
+    assert.ok(data.nombre.toLowerCase().includes('tuf gaming'), `Nombre debe incluir TUF Gaming, recibido: ${data.nombre}`);
     assert.ok(data.precioCmr, 'Debe haber extraído Precio CMR');
     assert.strictEqual(data.tipoPrecio, 'ou', 'Debe clasificar tipo de precio como ou al tener CMR');
     assert.ok(data.precioOferta || data.precioNormal, 'Debe haber extraído Precio Oferta o Normal');
-    console.log(`     -> Datos extraídos en vivo: ${data.marca} | ${data.categoria} | CMR: ${data.precioCmr} | Oferta: ${data.precioOferta} | Normal: ${data.precioNormal}`);
+    console.log(`     -> Datos extraídos en vivo (80758852): ${data.marca} | ${data.categoria} | CMR: ${data.precioCmr} | Oferta: ${data.precioOferta} | Normal: ${data.precioNormal}`);
+
+    const dataAfeitadora = await scrapeFalabellaProduct('https://www.falabella.com/falabella-cl/product/16746420/Afeitadora-Philips-Qp2724-10-Oneblade/16746420');
+    assert.strictEqual(dataAfeitadora.sku, '16746420');
+    assert.strictEqual(dataAfeitadora.marca, 'PHILIPS');
+    assert.strictEqual(dataAfeitadora.categoria, 'Maquina de afeitar');
+    console.log(`     -> Datos extraídos en vivo (16746420): ${dataAfeitadora.marca} | ${dataAfeitadora.categoria} | Normal/Oferta: ${dataAfeitadora.precioOferta || dataAfeitadora.precioNormal}`);
   });
 
   console.log(`\n${C.bold}Resultado: ${passed}/${total} pruebas pasadas.${C.reset}\n`);

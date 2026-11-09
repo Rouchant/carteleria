@@ -128,6 +128,7 @@ const calcCode = fs.readFileSync(path.join(SRC_DIR, 'js/calculator.js'), 'utf-8'
 const tplCode = fs.readFileSync(path.join(SRC_DIR, 'js/templates.js'), 'utf-8');
 const stateCode = fs.readFileSync(path.join(SRC_DIR, 'js/state.js'), 'utf-8');
 const exportCode = fs.readFileSync(path.join(SRC_DIR, 'js/export.js'), 'utf-8');
+const categoriasCode = fs.readFileSync(path.join(SRC_DIR, 'js/categorias.js'), 'utf-8');
 const batchCode = fs.readFileSync(path.join(SRC_DIR, 'js/batch.js'), 'utf-8');
 
 const ctx = {
@@ -136,6 +137,8 @@ const ctx = {
   Date,
   String,
   RegExp,
+  Set,
+  Array,
   window: {},
   document: {
     createElement: (tag) => new MockElement(tag)
@@ -147,6 +150,7 @@ vm.runInContext(utilsCode, ctx);
 vm.runInContext(calcCode, ctx);
 vm.runInContext(stateCode, ctx);
 vm.runInContext(tplCode, ctx);
+vm.runInContext(categoriasCode, ctx);
 vm.runInContext(batchCode, ctx);
 
 console.log(`\n${C.bold}${C.cyan}================================================================${C.reset}`);
@@ -233,14 +237,26 @@ test('getSemanaVigenteActual: Al cambiar a Martes 13 arranca nuevo ciclo hasta L
 currentCategory = 'unitCalculator';
 console.log(`\n${C.bold}${C.yellow}--- [2] Pruebas Unitarias: Cálculos Financieros CMR (calculator.js) ---${C.reset}`);
 
-test('calcularFinanciamiento genera cuota y CTC oficiales para monto retail', () => {
+test('calcularFinanciamiento genera cuota y CTC oficiales para monto retail (tramo estándar y tramo alto > 50 UF)', () => {
+  const fin0 = ctx.calcularFinanciamiento(589990, 39.93);
+  expect(fin0.cuota).toBe(59762);
+  expect(fin0.ctc).toBe(721817);
+
   const fin1 = ctx.calcularFinanciamiento(639990, 39.93);
   expect(fin1.cuota).toBe(64826);
   expect(fin1.ctc).toBe(782981);
 
+  const finMid = ctx.calcularFinanciamiento(1219990, 39.93);
+  expect(finMid.cuota).toBe(123576);
+  expect(finMid.ctc).toBe(1492574);
+
   const fin2 = ctx.calcularFinanciamiento(1499990, 39.93);
   expect(fin2.cuota).toBe(151938);
   expect(fin2.ctc).toBe(1835136);
+
+  const finAlto = ctx.calcularFinanciamiento(2999990, 39.93);
+  expect(finAlto.cuota).toBe(301995);
+  expect(finAlto.ctc).toBe(3647858);
 });
 
 test('calcularFinanciamiento responde cuota 0 y ctc 0 ante capital nulo o menor o igual a $60.000', () => {
